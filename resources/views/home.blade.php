@@ -31,7 +31,6 @@
 
 <body class="bg-softblue font-sans">
 
-    {{-- NAVBAR --}}
     <header class="bg-white/80 backdrop-blur-sm shadow-sm fixed top-0 w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-2">
