@@ -4,13 +4,24 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Notification;
 
 class NotifikasiController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (!auth()->check() || auth()->user()->role !== 'admin') {
+                abort(403, 'Akses ditolak. Anda bukan admin.');
+            }
+            return $next($request);
+        });
+    }
+
     // 🟦 Tampilkan semua notifikasi
     public function index()
     {
-        $notifications = session('notifications', []);
+        $notifications = Notification::orderBy('created_at', 'desc')->get();
         return view('admin.notifications.index', compact('notifications'));
     }
 
@@ -28,18 +39,10 @@ class NotifikasiController extends Controller
             'message' => 'required'
         ]);
 
-        $notifications = session('notifications', []);
-
-        $new = [
-            'id' => uniqid(),
+        Notification::create([
             'title' => $request->title,
             'message' => $request->message,
-            'created_at' => now()->format('d/m/Y H:i'),
-            'updated_at' => null
-        ];
-
-        $notifications[] = $new;
-        session(['notifications' => $notifications]);
+        ]);
 
         return redirect()->route('admin.notifications.index')
                          ->with('success', 'Notifikasi berhasil ditambahkan!');
@@ -48,13 +51,7 @@ class NotifikasiController extends Controller
     // 🟧 Form edit notifikasi
     public function edit($id)
     {
-        $notifications = session('notifications', []);
-        $notification = collect($notifications)->firstWhere('id', $id);
-
-        if (!$notification) {
-            return redirect()->route('admin.notifications.index')
-                             ->with('error', 'Notifikasi tidak ditemukan.');
-        }
+        $notification = Notification::findOrFail($id);
 
         return view('admin.notifications.edit', compact('notification'));
     }
@@ -67,18 +64,11 @@ class NotifikasiController extends Controller
             'message' => 'required'
         ]);
 
-        $notifications = session('notifications', []);
-
-        foreach ($notifications as &$notification) {
-            if ($notification['id'] === $id) {
-                $notification['title'] = $request->title;
-                $notification['message'] = $request->message;
-                $notification['updated_at'] = now()->format('d/m/Y H:i');
-                break;
-            }
-        }
-
-        session(['notifications' => $notifications]);
+        $notification = Notification::findOrFail($id);
+        $notification->update([
+            'title' => $request->title,
+            'message' => $request->message,
+        ]);
 
         return redirect()->route('admin.notifications.index')
                          ->with('success', 'Notifikasi berhasil diperbarui!');
@@ -87,10 +77,8 @@ class NotifikasiController extends Controller
     // 🟥 Hapus notifikasi
     public function destroy($id)
     {
-        $notifications = session('notifications', []);
-        $filtered = array_filter($notifications, fn($n) => $n['id'] !== $id);
-
-        session(['notifications' => array_values($filtered)]);
+        $notification = Notification::findOrFail($id);
+        $notification->delete();
 
         return redirect()->route('admin.notifications.index')
                          ->with('success', 'Notifikasi berhasil dihapus!');

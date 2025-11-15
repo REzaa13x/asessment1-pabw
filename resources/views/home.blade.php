@@ -34,9 +34,12 @@
     <header class="bg-white/80 backdrop-blur-sm shadow-sm fixed top-0 w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-2">
-                {{-- Ganti dengan logo SVG atau PNG yang lebih high-res --}}
-                <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01M12 6v-1m0-1V4m0 2.01v.01M12 12v4m0 4v2m0-6.01v.01M12 18v-2m0-1.99v.01m0 0h.01M12 12h-4m4 0h4m-4-4v-1m4 5v-1m-4 5h-1m5 0h-1m-4-4h.01M16 12h.01M8 12h.01M9 16h.01M15 16h.01M10 9h.01M14 9h.01"></path>
+                <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M50 75l-25-25c-10-10-15-20-5-30 10-10 25-10 35 0 10-10 25-10 35 0 10 10 5 20-5 30z"
+                        fill="currentColor"/>
+                    <text x="50" y="75" text-anchor="middle" font-family="Arial, sans-serif"
+                          font-size="10" fill="currentColor" font-weight="bold">D</text>
                 </svg>
                 <div class="flex flex-col leading-tight">
                     <span class="text-xl font-bold text-primary">DonGiv</span>
@@ -51,8 +54,31 @@
             </nav>
 
             <div class="flex items-center space-x-3">
-                <button class="px-5 py-2 rounded-full font-semibold border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300">Masuk</button>
-                <button class="px-5 py-2 rounded-full font-semibold bg-primary text-white hover:bg-blue-800 transition-all duration-300">Daftar</button>
+                @auth
+                    <!-- Profile dropdown when user is logged in -->
+                    <div class="relative">
+                        <button id="profileButton" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-semibold hover:bg-blue-200 transition-colors" type="button">
+                            <span class="font-bold">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
+                        </button>
+                        <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                            <a href="{{ route('profiles.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                                <i class="fas fa-user mr-2"></i>Profil Saya
+                            </a>
+                            <form method="POST" action="{{ route('logout') }}" id="logout-form" style="display: none;">
+                                @csrf
+                            </form>
+                            <a href="{{ route('logout') }}"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Keluar
+                            </a>
+                        </div>
+                    </div>
+                @else
+                    <!-- Login and Register buttons when user is not logged in -->
+                    <a href="{{ route('login') }}" class="px-5 py-2 rounded-full font-semibold border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300">Masuk</a>
+                    <a href="{{ route('register') }}" class="px-5 py-2 rounded-full font-semibold bg-primary text-white hover:bg-blue-800 transition-all duration-300">Daftar</a>
+                @endauth
             </div>
         </div>
     </header>
@@ -127,72 +153,43 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {{-- CARD DONASI 1 --}}
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-                        <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=2070&auto=format&fit=crop" class="w-full h-52 object-cover" alt="Bantuan Pangan">
-                        <div class="p-6 flex flex-col flex-grow">
-                            <span class="bg-blue-100 text-primary text-xs font-semibold px-2.5 py-1 rounded-full self-start mb-3">Kemanusiaan</span>
-                            <h3 class="font-bold text-lg text-gray-800 mb-2">Bantu Korban Banjir Bandang di Desa Sukamaju</h3>
-                            <p class="text-sm text-gray-500 mb-4">oleh <span class="font-semibold text-primary">Yayasan Harapan Bangsa</span></p>
+                    @if(isset($campaigns) && !empty($campaigns))
+                        @foreach($campaigns as $campaign)
+                            <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                                <img src="{{ $campaign->image }}" class="w-full h-52 object-cover" alt="{{ $campaign->title }}">
+                                <div class="p-6 flex flex-col flex-grow">
+                                    <span class="bg-blue-100 text-primary text-xs font-semibold px-2.5 py-1 rounded-full self-start mb-3">{{ $campaign->status }}</span>
+                                    <h3 class="font-bold text-lg text-gray-800 mb-2">{{ $campaign->title }}</h3>
+                                    <p class="text-sm text-gray-500 mb-4">oleh <span class="font-semibold text-primary">DonGiv</span></p>
 
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
-                                <div class="bg-accent h-2.5 rounded-full" style="width: 75%"></div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
+                                        <div class="bg-accent h-2.5 rounded-full" style="width: {{ min(100, ($campaign->current_amount / $campaign->target_amount) * 100) }}%"></div>
+                                    </div>
+
+                                    <div class="flex justify-between text-sm mb-4">
+                                        <p class="font-semibold">Terkumpul: <span class="text-gray-800">Rp {{ number_format($campaign->current_amount, 0, ',', '.') }}</span></p>
+                                        <p class="text-gray-500">{{ $campaign->end_date ? $campaign->end_date->format('d/m/Y') : 'Tidak ada batas' }}</p>
+                                    </div>
+
+                                    <button class="w-full mt-auto bg-primary text-white font-bold py-2.5 px-4 rounded-lg hover:bg-blue-800 transition-colors">Donasi Sekarang</button>
+                                </div>
                             </div>
-
-                            <div class="flex justify-between text-sm mb-4">
-                                <p class="font-semibold">Terkumpul: <span class="text-gray-800">Rp 75.000.000</span></p>
-                                <p class="text-gray-500">15 hari lagi</p>
+                        @endforeach
+                    @else
+                        <div class="col-span-full text-center py-12">
+                            <div class="mx-auto w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                                <i class="fas fa-donate text-blue-500 text-3xl"></i>
                             </div>
-
-                            <button class="w-full mt-auto bg-primary text-white font-bold py-2.5 px-4 rounded-lg hover:bg-blue-800 transition-colors">Donasi Sekarang</button>
+                            <h3 class="text-xl font-semibold text-gray-700 mb-2">Belum ada kampanye</h3>
+                            <p class="text-gray-500">Jadilah yang pertama mendukung kegiatan sosial melalui platform DonGiv</p>
                         </div>
-                    </div>
-
-                    {{-- CARD DONASI 2 --}}
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-                        <img src="https://images.unsplash.com/photo-1504159506829-3d854ad427f4?q=80&w=2070&auto=format&fit=crop" class="w-full h-52 object-cover" alt="Bantuan Pendidikan">
-                        <div class="p-6 flex flex-col flex-grow">
-                            <span class="bg-green-100 text-green-700 text-xs font-semibold px-2.5 py-1 rounded-full self-start mb-3">Pendidikan</span>
-                            <h3 class="font-bold text-lg text-gray-800 mb-2">Beasiswa untuk Anak Yatim Berprestasi</h3>
-                            <p class="text-sm text-gray-500 mb-4">oleh <span class="font-semibold text-primary">Komunitas Cerdas</span></p>
-
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
-                                <div class="bg-accent h-2.5 rounded-full" style="width: 45%"></div>
-                            </div>
-
-                            <div class="flex justify-between text-sm mb-4">
-                                <p class="font-semibold">Terkumpul: <span class="text-gray-800">Rp 22.500.000</span></p>
-                                <p class="text-gray-500">40 hari lagi</p>
-                            </div>
-
-                            <button class="w-full mt-auto bg-primary text-white font-bold py-2.5 px-4 rounded-lg hover:bg-blue-800 transition-colors">Donasi Sekarang</button>
-                        </div>
-                    </div>
-
-                    {{-- CARD DONASI 3 --}}
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-                        <img src="https://images.unsplash.com/photo-1576765608866-5b43c2105192?q=80&w=2070&auto=format&fit=crop" class="w-full h-52 object-cover" alt="Bantuan Medis">
-                        <div class="p-6 flex flex-col flex-grow">
-                            <span class="bg-red-100 text-red-700 text-xs font-semibold px-2.5 py-1 rounded-full self-start mb-3">Kesehatan</span>
-                            <h3 class="font-bold text-lg text-gray-800 mb-2">Biaya Operasi Jantung untuk Pak Budi</h3>
-                            <p class="text-sm text-gray-500 mb-4">oleh <span class="font-semibold text-primary">Keluarga Pak Budi</span></p>
-
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
-                                <div class="bg-accent h-2.5 rounded-full" style="width: 90%"></div>
-                            </div>
-
-                            <div class="flex justify-between text-sm mb-4">
-                                <p class="font-semibold">Terkumpul: <span class="text-gray-800">Rp 180.000.000</span></p>
-                                <p class="text-gray-500">5 hari lagi</p>
-                            </div>
-
-                            <button class="w-full mt-auto bg-primary text-white font-bold py-2.5 px-4 rounded-lg hover:bg-blue-800 transition-colors">Donasi Sekarang</button>
-                        </div>
-                    </div>
+                    @endif
                 </div>
-                <div class="text-center mt-12">
-                    <a href="#" class="text-primary font-semibold hover:underline">Lihat Semua Kampanye <i class="fas fa-arrow-right ml-1"></i></a>
-                </div>
+                @if(isset($campaigns) && !empty($campaigns))
+                    <div class="text-center mt-12">
+                        <a href="#" class="text-primary font-semibold hover:underline">Lihat Semua Kampanye <i class="fas fa-arrow-right ml-1"></i></a>
+                    </div>
+                @endif
             </div>
         </section>
 
@@ -283,6 +280,27 @@
         </div>
     </footer>
 
+    <script>
+        // Profile dropdown functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileButton = document.getElementById('profileButton');
+            const profileDropdown = document.getElementById('profileDropdown');
+
+            if (profileButton && profileDropdown) {
+                profileButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    profileDropdown.classList.toggle('hidden');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!profileButton.contains(e.target) && !profileDropdown.contains(e.target)) {
+                        profileDropdown.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

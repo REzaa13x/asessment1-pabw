@@ -4,115 +4,129 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Campaign;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CampaignController extends Controller
 {
-    // Helper: Mengambil semua kampanye dari session
-    private function getCampaigns()
+    public function __construct()
     {
-        // Ambil array 'campaigns' dari session. Jika kosong, kembalikan array kosong.
-        return session('campaigns', []);
+        $this->middleware(function ($request, $next) {
+            if (!auth()->check() || auth()->user()->role !== 'admin') {
+                abort(403, 'Akses ditolak. Anda bukan admin.');
+            }
+            return $next($request);
+        });
     }
 
-    // Helper: Menyimpan array kampanye ke session
-    private function saveCampaigns(array $campaigns)
-    {
-        session(['campaigns' => $campaigns]);
-    }
-
-    // [R]EAD: Menampilkan daftar kampanye (Menggunakan nama view baru: daftar-kampanye)
     public function index()
     {
-        $campaigns = $this->getCampaigns();
-        // Pastikan nama view sesuai dengan nama file baru: 'admin.campaigns.daftar-kampanye'
+        $campaigns = Campaign::all();
         return view('admin.campaigns.daftar-kampanye', compact('campaigns'));
     }
 
-    // [C]REATE: Menampilkan form tambah kampanye
     public function create()
     {
         return view('admin.campaigns.create');
     }
 
-    // [C]REATE: Menyimpan kampanye baru ke Session
     public function store(Request $request)
     {
         $validated = $request->validate([
             'title' => 'required|max:255',
             'description' => 'required',
             'target_amount' => 'required|numeric|min:1000',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // max 5MB
             'end_date' => 'nullable|date',
         ]);
 
-        $campaigns = $this->getCampaigns();
-
-        // Buat ID unik dan data tambahan
-        $newCampaign = array_merge($validated, [
-            'id' => (string) Str::uuid(), // ID unik untuk identifikasi
-            'current_amount' => 0,
-            'status' => 'Active',
-            'created_at' => now()->toDateTimeString(),
-        ]);
-
-        $campaigns[] = $newCampaign; // Tambahkan ke array
-        $this->saveCampaigns($campaigns); // Simpan kembali ke session
-
-        return redirect()->route('admin.campaigns.index')->with('success', 'Kampanye berhasil dibuat (Non-Database).');
-    }
-
-    // [U]PDATE: Menampilkan form edit
-    public function edit($id)
-    {
-        $campaigns = $this->getCampaigns();
-        // Menggunakan koleksi Laravel untuk mencari berdasarkan ID
-        $campaign = collect($campaigns)->firstWhere('id', $id);
-
-        if (!$campaign) {
-            return redirect()->route('admin.campaigns.index')->with('error', 'Kampanye tidak ditemukan.');
+        // Handle image upload
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = $image->storeAs('public/campaigns', $imageName);
+            $imagePath = str_replace('public/', 'storage/', $imagePath); // Convert to public path
         }
 
+        $campaign = Campaign::create([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'target_amount' => $validated['target_amount'],
+            'end_date' => $validated['end_date'] ?? null,
+            'image' => $imagePath ?: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=2070&auto=format&fit=crop',
+            'status' => 'Active', // Default to active when created
+        ]);
+
+        return redirect()->route('admin.campaigns.index')->with('success', 'Kampanye berhasil dibuat');
+    }
+
+    public function edit($id)
+    {
+        $campaign = Campaign::findOrFail($id);
         return view('admin.campaigns.edit', compact('campaign'));
     }
 
-    // [U]PDATE: Menyimpan perubahan
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
             'title' => 'required|max:255',
             'description' => 'required',
             'target_amount' => 'required|numeric|min:1000',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // max 5MB
             'end_date' => 'nullable|date',
         ]);
 
-        $campaigns = $this->getCampaigns();
-        $index = collect($campaigns)->search(function ($item) use ($id) {
-            return $item['id'] === $id;
-        });
+        $campaign = Campaign::findOrFail($id);
 
-        if ($index !== false) {
-            // Gabungkan data lama dengan data yang divalidasi
-            $campaigns[$index] = array_merge($campaigns[$index], $validated);
-            $this->saveCampaigns($campaigns);
-            return redirect()->route('admin.campaigns.index')->with('success', 'Kampanye berhasil diperbarui.');
+        // Handle image upload
+        $imagePath = $campaign->image;
+        if ($request->hasFile('image')) {
+            // Delete old image if it's not the default
+            if ($campaign->image && !str_contains($campaign->image, 'unsplash.com')) {
+                $cleanPath = str_replace('storage/', 'public/', $campaign->image);
+                // If it starts with public/, just use it directly
+                if (!str_starts_with($cleanPath, 'public/')) {
+                    $cleanPath = 'public/' . $cleanPath;
+                }
+                Storage::disk('local')->delete($cleanPath);
+            }
+
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $newImage = $image->storeAs('public/campaigns', $imageName);
+            $imagePath = str_replace('public/', 'storage/', $newImage); // Convert to public path
         }
 
-        return redirect()->route('admin.campaigns.index')->with('error', 'Kampanye gagal diperbarui.');
+        $campaign->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'target_amount' => $validated['target_amount'],
+            'end_date' => $validated['end_date'] ?? null,
+            'image' => $imagePath,
+        ]);
+
+        return redirect()->route('admin.campaigns.index')->with('success', 'Kampanye berhasil diperbarui.');
     }
 
-    // [D]ELETE: Menghapus kampanye dari Session
     public function destroy($id)
     {
-        $campaigns = $this->getCampaigns();
+        $campaign = Campaign::findOrFail($id);
 
-        // Filter array, hanya simpan yang ID-nya TIDAK sama dengan $id
-        $updatedCampaigns = array_filter($campaigns, function ($campaign) use ($id) {
-            return $campaign['id'] !== $id;
-        });
+        // Delete image file if it exists and is not the default
+        if ($campaign->image && !str_contains($campaign->image, 'unsplash.com')) {
+            // Convert storage path to public path for deletion
+            $cleanPath = str_replace('storage/', 'public/', $campaign->image);
+            // If it starts with public/, just use it directly
+            if (!str_starts_with($cleanPath, 'public/')) {
+                $cleanPath = 'public/' . $cleanPath;
+            }
+            Storage::disk('local')->delete($cleanPath);
+        }
 
-        // Konversi kembali ke array agar formatnya tetap konsisten
-        $this->saveCampaigns(array_values($updatedCampaigns));
+        $campaign->delete();
 
-        return redirect()->route('admin.campaigns.index')->with('success', 'Kampanye berhasil dihapus (Non-Database).');
+        return redirect()->route('admin.campaigns.index')->with('success', 'Kampanye berhasil dihapus.');
     }
 }
