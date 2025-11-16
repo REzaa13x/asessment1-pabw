@@ -34,16 +34,7 @@
     <header class="bg-white/80 backdrop-blur-sm shadow-sm fixed top-0 w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-2">
-                <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M50 75l-25-25c-10-10-15-20-5-30 10-10 25-10 35 0 10-10 25-10 35 0 10 10 5 20-5 30z"
-                        fill="currentColor"/>
-                    <text x="50" y="75" text-anchor="middle" font-family="Arial, sans-serif"
-                          font-size="10" fill="currentColor" font-weight="bold">D</text>
-                </svg>
-                <div class="flex flex-col leading-tight">
-                    <span class="text-xl font-bold text-primary">DonGiv</span>
-                </div>
+                <img src="{{ asset('images/dongiv-logo.png') }}" alt="DonGiv Logo" class="h-8">
             </div>
 
             <nav class="hidden md:flex items-center space-x-8 font-medium">
@@ -55,29 +46,29 @@
 
             <div class="flex items-center space-x-3">
                 @auth
-                    <!-- Profile dropdown when user is logged in -->
-                    <div class="relative">
-                        <button id="profileButton" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-semibold hover:bg-blue-200 transition-colors" type="button">
-                            <span class="font-bold">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
-                        </button>
-                        <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
-                            <a href="{{ route('profiles.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                                <i class="fas fa-user mr-2"></i>Profil Saya
-                            </a>
-                            <form method="POST" action="{{ route('logout') }}" id="logout-form" style="display: none;">
-                                @csrf
-                            </form>
-                            <a href="{{ route('logout') }}"
-                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">
-                                <i class="fas fa-sign-out-alt mr-2"></i>Keluar
-                            </a>
-                        </div>
+                <!-- Profile dropdown when user is logged in -->
+                <div class="relative">
+                    <button id="profileButton" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-semibold hover:bg-blue-200 transition-colors" type="button">
+                        <span class="font-bold">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
+                    </button>
+                    <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
+                        <a href="{{ route('profiles.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                            <i class="fas fa-user mr-2"></i>Profil Saya
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}" id="logout-form" style="display: none;">
+                            @csrf
+                        </form>
+                        <a href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Keluar
+                        </a>
                     </div>
+                </div>
                 @else
-                    <!-- Login and Register buttons when user is not logged in -->
-                    <a href="{{ route('login') }}" class="px-5 py-2 rounded-full font-semibold border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300">Masuk</a>
-                    <a href="{{ route('register') }}" class="px-5 py-2 rounded-full font-semibold bg-primary text-white hover:bg-blue-800 transition-all duration-300">Daftar</a>
+                <!-- Login and Register buttons when user is not logged in -->
+                <a href="{{ route('login') }}" class="px-5 py-2 rounded-full font-semibold border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300">Masuk</a>
+                <a href="{{ route('register') }}" class="px-5 py-2 rounded-full font-semibold bg-primary text-white hover:bg-blue-800 transition-all duration-300">Daftar</a>
                 @endauth
             </div>
         </div>
@@ -154,41 +145,41 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @if(isset($campaigns) && !empty($campaigns))
-                        @foreach($campaigns as $campaign)
-                            <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-                                <img src="{{ $campaign->image }}" class="w-full h-52 object-cover" alt="{{ $campaign->title }}">
-                                <div class="p-6 flex flex-col flex-grow">
-                                    <span class="bg-blue-100 text-primary text-xs font-semibold px-2.5 py-1 rounded-full self-start mb-3">{{ $campaign->status }}</span>
-                                    <h3 class="font-bold text-lg text-gray-800 mb-2">{{ $campaign->title }}</h3>
-                                    <p class="text-sm text-gray-500 mb-4">oleh <span class="font-semibold text-primary">DonGiv</span></p>
+                    @foreach($campaigns as $campaign)
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                        <img src="{{ $campaign->image }}" class="w-full h-52 object-cover" alt="{{ $campaign->title }}">
+                        <div class="p-6 flex flex-col flex-grow">
+                            <span class="bg-blue-100 text-primary text-xs font-semibold px-2.5 py-1 rounded-full self-start mb-3">{{ $campaign->status }}</span>
+                            <h3 class="font-bold text-lg text-gray-800 mb-2">{{ $campaign->title }}</h3>
+                            <p class="text-sm text-gray-500 mb-4">oleh <span class="font-semibold text-primary">DonGiv</span></p>
 
-                                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
-                                        <div class="bg-accent h-2.5 rounded-full" style="width: {{ min(100, ($campaign->current_amount / $campaign->target_amount) * 100) }}%"></div>
-                                    </div>
-
-                                    <div class="flex justify-between text-sm mb-4">
-                                        <p class="font-semibold">Terkumpul: <span class="text-gray-800">Rp {{ number_format($campaign->current_amount, 0, ',', '.') }}</span></p>
-                                        <p class="text-gray-500">{{ $campaign->end_date ? $campaign->end_date->format('d/m/Y') : 'Tidak ada batas' }}</p>
-                                    </div>
-
-                                    <button class="w-full mt-auto bg-primary text-white font-bold py-2.5 px-4 rounded-lg hover:bg-blue-800 transition-colors">Donasi Sekarang</button>
-                                </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
+                                <div class="bg-accent h-2.5 rounded-full" style="width: {{ min(100, ($campaign->current_amount / $campaign->target_amount) * 100) }}%"></div>
                             </div>
-                        @endforeach
-                    @else
-                        <div class="col-span-full text-center py-12">
-                            <div class="mx-auto w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-6">
-                                <i class="fas fa-donate text-blue-500 text-3xl"></i>
+
+                            <div class="flex justify-between text-sm mb-4">
+                                <p class="font-semibold">Terkumpul: <span class="text-gray-800">Rp {{ number_format($campaign->current_amount, 0, ',', '.') }}</span></p>
+                                <p class="text-gray-500">{{ $campaign->end_date ? $campaign->end_date->format('d/m/Y') : 'Tidak ada batas' }}</p>
                             </div>
-                            <h3 class="text-xl font-semibold text-gray-700 mb-2">Belum ada kampanye</h3>
-                            <p class="text-gray-500">Jadilah yang pertama mendukung kegiatan sosial melalui platform DonGiv</p>
+
+                            <button class="w-full mt-auto bg-primary text-white font-bold py-2.5 px-4 rounded-lg hover:bg-blue-800 transition-colors">Donasi Sekarang</button>
                         </div>
+                    </div>
+                    @endforeach
+                    @else
+                    <div class="col-span-full text-center py-12">
+                        <div class="mx-auto w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                            <i class="fas fa-donate text-blue-500 text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Belum ada kampanye</h3>
+                        <p class="text-gray-500">Jadilah yang pertama mendukung kegiatan sosial melalui platform DonGiv</p>
+                    </div>
                     @endif
                 </div>
                 @if(isset($campaigns) && !empty($campaigns))
-                    <div class="text-center mt-12">
-                        <a href="#" class="text-primary font-semibold hover:underline">Lihat Semua Kampanye <i class="fas fa-arrow-right ml-1"></i></a>
-                    </div>
+                <div class="text-center mt-12">
+                    <a href="#" class="text-primary font-semibold hover:underline">Lihat Semua Kampanye <i class="fas fa-arrow-right ml-1"></i></a>
+                </div>
                 @endif
             </div>
         </section>
