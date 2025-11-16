@@ -40,10 +40,12 @@
             <nav class="hidden md:flex items-center space-x-8 font-medium">
                 <a href="#donasi" class="text-gray-700 hover:text-primary transition">Donasi</a>
                 <a href="#" class="text-gray-700 hover:text-primary transition">Galang Dana</a>
+
+                <a href="{{ route('volunteer') }}" class="text-gray-700 hover:text-primary transition">Relawan</a>
+
                 <a href="#cara-kerja" class="text-gray-700 hover:text-primary transition">Cara Kerja</a>
                 <a href="#" class="text-gray-700 hover:text-primary transition">Tentang Kami</a>
             </nav>
-
             <div class="flex items-center space-x-3">
                 @auth
                 <!-- Profile dropdown when user is logged in -->
