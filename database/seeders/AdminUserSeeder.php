@@ -16,12 +16,14 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create an admin user with the specified credentials
-        User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make('12345678'),
-            'role' => 'admin',
-        ]);
+        // Create an admin user with the specified credentials only if it doesn't exist
+        User::firstOrCreate(
+            ['email' => 'admin@gmail.com'],
+            [
+                'name' => 'Admin User',
+                'password' => Hash::make('12345678'),
+                'role' => 'admin',
+            ]
+        );
     }
 }

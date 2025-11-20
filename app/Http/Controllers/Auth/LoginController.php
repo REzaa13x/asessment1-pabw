@@ -31,7 +31,9 @@ class LoginController extends Controller
         // Check if user exists
         $user = User::where('email', $request->email)->first();
         if (!$user) {
-            return redirect()->back()->withErrors(['email' => 'Akun tidak ditemukan. Silakan daftar terlebih dahulu.']);
+            return redirect()->back()->withErrors([
+                'email' => 'Email tidak ditemukan. Silakan periksa kembali email Anda.'
+            ])->withInput($request->except('password'));
         }
 
         // Debug: Show user role before authentication
@@ -59,10 +61,10 @@ class LoginController extends Controller
             }
         }
 
-        // If login fails
+        // If login fails due to incorrect password
         return back()->withErrors([
-            'password' => 'Kata sandi yang Anda masukkan salah.',
-        ]);
+            'password' => 'Kata sandi yang Anda masukkan salah. Silakan coba lagi.',
+        ])->withInput($request->except('password'));
     }
 
     /**

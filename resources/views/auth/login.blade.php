@@ -172,6 +172,17 @@
                 </div>
             @endif
 
+            <!-- Display form errors -->
+            @if ($errors->any())
+                <div class="bg-red-50/80 border border-red-200 text-red-600 p-4 rounded-xl mb-6 fade-in">
+                    <ul class="list-disc pl-5 space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li class="flex items-center"><i class="fas fa-exclamation-circle mr-2"></i>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form action="{{ route('login.process') }}" method="POST" class="fade-in">
                 @csrf
                 <div class="mb-6 input-group">
@@ -180,10 +191,13 @@
                     </label>
                     <div class="relative">
                         <input type="email" id="email" name="email"
-                               class="input-field w-full border border-gray-200 p-4 rounded-xl focus:outline-none focus:border-blue-300 pl-12 bg-gray-50/50"
-                               placeholder="masukkan email Anda" required>
+                               class="input-field w-full border @error('email') border-red-500 @else border-gray-200 @enderror p-4 rounded-xl focus:outline-none focus:border-blue-300 pl-12 bg-gray-50/50"
+                               placeholder="masukkan email Anda" value="{{ old('email') }}" required>
                         <i class="fas fa-envelope absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-400"></i>
                     </div>
+                    @error('email')
+                        <p class="mt-2 text-sm text-red-600"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="mb-6 input-group">
@@ -192,10 +206,13 @@
                     </label>
                     <div class="relative">
                         <input type="password" id="password" name="password"
-                               class="input-field w-full border border-gray-200 p-4 rounded-xl focus:outline-none focus:border-blue-300 pl-12 bg-gray-50/50"
+                               class="input-field w-full border @error('password') border-red-500 @else border-gray-200 @enderror p-4 rounded-xl focus:outline-none focus:border-blue-300 pl-12 bg-gray-50/50"
                                placeholder="masukkan kata sandi" required>
                         <i class="fas fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-400"></i>
                     </div>
+                    @error('password')
+                        <p class="mt-2 text-sm text-red-600"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="flex items-center justify-between mb-6">
