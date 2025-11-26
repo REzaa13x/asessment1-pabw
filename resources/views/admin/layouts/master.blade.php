@@ -82,7 +82,7 @@
                 </a>
                 <a href="{{ route('admin.verifikasi-relawan.index') }}" class="nav-item {{ request()->routeIs('admin.verifikasi-relawan.*') ? 'active' : '' }} flex items-center space-x-3 py-3 px-4 mb-2">
                     <i class="fas fa-user-check"></i>
-                    <span>Verifikasi Relawan</span>
+                    <span>Daftar Relawan</span>
                 </a>
                 <a href="{{ route('admin.notifications.index') }}" class="nav-item {{ request()->routeIs('admin.notifications.*') ? 'active' : '' }} flex items-center space-x-3 py-3 px-4 mb-2">
                     <i class="fas fa-bell"></i>

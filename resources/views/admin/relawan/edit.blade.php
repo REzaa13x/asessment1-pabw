@@ -9,10 +9,25 @@
         </a>
     </div>
 
-    <form action="{{ route('admin.relawan.update', $campaign->id) }}" method="POST">
+    <form action="{{ route('admin.relawan.update', $campaign->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="md:col-span-2">
+                @if($campaign->image)
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Saat Ini</label>
+                        <img src="{{ asset($campaign->image) }}" alt="Gambar Kampanye" class="w-32 h-32 object-cover rounded-lg border border-gray-300">
+                    </div>
+                @endif
+                <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Ganti Gambar Kampanye</label>
+                <input type="file" name="image" id="image" accept="image/*"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                @error('image')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
             <div class="md:col-span-2">
                 <label for="judul" class="block text-sm font-medium text-gray-700 mb-1">Judul Kampanye</label>
                 <input type="text" name="judul" id="judul" value="{{ old('judul', $campaign->judul) }}" required

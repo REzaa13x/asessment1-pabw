@@ -73,6 +73,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/relawan/{id}', [\App\Http\Controllers\Admin\VolunteerCampaignController::class, 'show'])->name('relawan.show');
     Route::get('/relawan/{id}/edit', [\App\Http\Controllers\Admin\VolunteerCampaignController::class, 'edit'])->name('relawan.edit');
     Route::put('/relawan/{id}', [\App\Http\Controllers\Admin\VolunteerCampaignController::class, 'update'])->name('relawan.update');
+    Route::post('/relawan/{id}/toggle-status', [\App\Http\Controllers\Admin\VolunteerCampaignController::class, 'toggleStatus'])->name('relawan.toggle-status');
     Route::delete('/relawan/{id}', [\App\Http\Controllers\Admin\VolunteerCampaignController::class, 'destroy'])->name('relawan.delete');
 
     // ADMIN - Verifikasi Pendaftaran Relawan

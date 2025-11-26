@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class VolunteerCampaign extends Model
 {
     protected $fillable = [
+        'image',
         'judul',
         'lokasi',
         'tanggal_mulai',

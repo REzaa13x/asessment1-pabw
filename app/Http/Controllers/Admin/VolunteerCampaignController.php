@@ -28,7 +28,15 @@ class VolunteerCampaignController extends Controller
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date',
             'status' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // max 2MB
         ]);
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = $image->storeAs('volunteer_campaigns', $imageName, 'public');
+            $validated['image'] = 'storage/' . $imagePath;
+        }
 
         $campaign = VolunteerCampaign::create($validated);
 
@@ -63,12 +71,49 @@ class VolunteerCampaignController extends Controller
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date',
             'status' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // max 2MB
         ]);
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($campaign->image && file_exists(public_path($campaign->image))) {
+                unlink(public_path($campaign->image));
+            }
+
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = $image->storeAs('volunteer_campaigns', $imageName, 'public');
+            $validated['image'] = 'storage/' . $imagePath;
+        }
 
         $campaign->update($validated);
 
         return redirect()->route('admin.relawan.show', ['id' => $campaign->id])
             ->with('success', 'Kampanye relawan berhasil diperbarui');
+    }
+
+    public function toggleStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:Aktif,Nonaktif'
+        ]);
+
+        $campaign = VolunteerCampaign::findOrFail($id);
+
+        $oldStatus = $campaign->status;
+        $newStatus = $request->status;
+
+        // Update the status
+        $campaign->update(['status' => $newStatus]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status kampanye berhasil diperbarui',
+            'campaign' => [
+                'id' => $campaign->id,
+                'status' => $campaign->status
+            ]
+        ]);
     }
 
     public function destroy($id)

@@ -7,9 +7,15 @@
         <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
             <div class="flex-1">
                 <div class="flex items-center gap-3 mb-3">
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <i class="fas fa-people-group text-blue-600 text-xl"></i>
-                    </div>
+                    @if($campaign->image)
+                        <div class="w-12 h-12 rounded-lg overflow-hidden">
+                            <img src="{{ asset($campaign->image) }}" alt="Gambar Kampanye" class="w-full h-full object-cover">
+                        </div>
+                    @else
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-people-group text-blue-600 text-xl"></i>
+                        </div>
+                    @endif
                     <div>
                         <h1 class="text-2xl md:text-3xl font-bold text-gray-800">{{ $campaign->judul }}</h1>
                         <p class="text-gray-600 text-sm mt-1">{{ $campaign->lokasi }}</p>
@@ -108,6 +114,9 @@
                         <option value="disetujui">Terverifikasi</option>
                         <option value="ditolak">Ditolak</option>
                     </select>
+                    <a href="{{ route('admin.verifikasi-relawan.by-campaign', $campaign->id) }}" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-2 px-4 rounded-lg flex items-center transition-all duration-200 shadow-md hover:shadow-lg">
+                        <i class="fas fa-user-check mr-2"></i> Verifikasi Relawan
+                    </a>
                 </div>
             </div>
 
@@ -158,19 +167,9 @@
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         @if($volunteer->status_verifikasi == 'pending')
-                                        <form action="{{ route('admin.verifikasi-relawan.verify', $volunteer->id) }}" method="POST" class="inline">
-                                            @csrf
-                                            <button type="submit" class="text-green-600 hover:text-green-900 hover:bg-green-50 p-2 rounded-full transition-colors duration-200" title="Verifikasi">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                        </form>
-                                        <form action="{{ route('admin.verifikasi-relawan.reject', $volunteer->id) }}" method="POST" class="inline">
-                                            @csrf
-                                            @method('POST')
-                                            <button type="submit" class="text-red-600 hover:text-red-900 hover:bg-red-50 p-2 rounded-full transition-colors duration-200" title="Tolak">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </form>
+                                        <a href="{{ route('admin.verifikasi-relawan.index') }}" class="text-yellow-600 hover:text-yellow-900 hover:bg-yellow-50 p-2 rounded-full transition-colors duration-200" title="Verifikasi di halaman khusus">
+                                            <i class="fas fa-user-check"></i>
+                                        </a>
                                         @endif
                                     </div>
                                 </td>
@@ -197,6 +196,14 @@
                 <div>
                     <h3 class="text-lg font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">Informasi Kampanye</h3>
                     <div class="space-y-5">
+                        @if($campaign->image)
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Gambar Kampanye</label>
+                            <div class="p-3 rounded-lg">
+                                <img src="{{ asset($campaign->image) }}" alt="Gambar Kampanye" class="w-full max-w-md rounded-lg border border-gray-200 object-cover h-48">
+                            </div>
+                        </div>
+                        @endif
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Judul Kampanye</label>
                             <p class="text-gray-900 bg-gray-50 p-3 rounded-lg">{{ $campaign->judul }}</p>
