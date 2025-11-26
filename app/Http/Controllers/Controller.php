@@ -16,6 +16,11 @@ class Controller extends BaseController
         // Get campaigns from the database
         $campaigns = Campaign::where('status', 'Active')->get();
 
-        return view('home', compact('campaigns'));
+        // Get active volunteer campaigns from the database
+        $volunteerCampaigns = \App\Models\VolunteerCampaign::where('status', 'Aktif')
+            ->orderBy('tanggal_mulai', 'desc')
+            ->get();
+
+        return view('home', compact('campaigns', 'volunteerCampaigns'));
     }
 }

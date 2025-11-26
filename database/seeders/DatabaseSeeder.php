@@ -24,5 +24,13 @@ class DatabaseSeeder extends Seeder
             'email' => 'donatur@gmail.com',
             'role' => 'donatur',
         ]);
+
+         $this->call([
+        VolunteerCampaignSeeder::class,
+    ]);
+
+        
     }
+ 
+    
 }

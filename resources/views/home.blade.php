@@ -41,7 +41,7 @@
                 <a href="#donasi" class="text-gray-700 hover:text-primary transition">Donasi</a>
                 <a href="#" class="text-gray-700 hover:text-primary transition">Galang Dana</a>
 
-                <a href="{{ route('volunteer') }}" class="text-gray-700 hover:text-primary transition">Relawan</a>
+                <a href="#volunteer-campaigns" class="text-gray-700 hover:text-primary transition">Relawan</a>
 
                 <a href="#cara-kerja" class="text-gray-700 hover:text-primary transition">Cara Kerja</a>
                 <a href="#" class="text-gray-700 hover:text-primary transition">Tentang Kami</a>
@@ -181,6 +181,51 @@
                 @if(isset($campaigns) && !empty($campaigns))
                 <div class="text-center mt-12">
                     <a href="#" class="text-primary font-semibold hover:underline">Lihat Semua Kampanye <i class="fas fa-arrow-right ml-1"></i></a>
+                </div>
+                @endif
+            </div>
+        </section>
+
+        {{-- DAFTAR KAMPANYE RELAWAN --}}
+        <section id="volunteer-campaigns" class="py-20 bg-softblue">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-gray-800">Kampanye Relawan</h2>
+                    <p class="text-gray-600 mt-2">Ikut serta dalam kegiatan sosial dan menjadi bagian dari perubahan positif</p>
+                </div>
+
+                @if(isset($volunteerCampaigns) && !empty($volunteerCampaigns))
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    @foreach($volunteerCampaigns as $vc)
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                        <div class="w-full h-52 bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center">
+                            <i class="fas fa-hand-holding-heart text-white text-5xl"></i>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-1 rounded-full self-start mb-3">{{ $vc->status }}</span>
+                            <h3 class="font-bold text-lg text-gray-800 mb-2">{{ $vc->judul }}</h3>
+                            <div class="flex items-center text-sm text-gray-500 mb-2">
+                                <i class="fas fa-map-marker-alt text-primary mr-2"></i>
+                                <span>{{ $vc->lokasi }}</span>
+                            </div>
+
+                            <div class="flex items-center text-sm text-gray-500 mb-4">
+                                <i class="fas fa-calendar-alt text-primary mr-2"></i>
+                                <span>{{ \Carbon\Carbon::parse($vc->tanggal_mulai)->format('d M Y') }} - {{ \Carbon\Carbon::parse($vc->tanggal_selesai)->format('d M Y') }}</span>
+                            </div>
+
+                            <a href="{{ route('volunteer.register') }}" class="w-full mt-auto bg-primary text-white font-bold py-2.5 px-4 rounded-lg hover:bg-blue-800 transition-colors text-center">Ikut Serta</a>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+                @else
+                <div class="text-center py-12">
+                    <div class="mx-auto w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-users text-blue-500 text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Belum ada kampanye relawan</h3>
+                    <p class="text-gray-500">Jadilah bagian dari kegiatan sosial melalui platform DonGiv</p>
                 </div>
                 @endif
             </div>
