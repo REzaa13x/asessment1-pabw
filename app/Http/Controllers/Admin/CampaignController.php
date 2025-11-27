@@ -37,26 +37,28 @@ class CampaignController extends Controller
             'title' => 'required|max:255',
             'description' => 'required',
             'target_amount' => 'required|numeric|min:1000',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // max 5MB
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
             'end_date' => 'nullable|date',
         ]);
 
-        // Handle image upload
         $imagePath = null;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
-            $imagePath = $image->storeAs('public/campaigns', $imageName);
-            $imagePath = str_replace('public/', 'storage/', $imagePath); // Convert to public path
+
+            // PERBAIKAN: Simpan langsung ke disk 'public'.
+            // Hasil $imagePath nanti cuma: "campaigns/namafile.jpg"
+            $imagePath = $image->storeAs('campaigns', $imageName, 'public');
         }
 
-        $campaign = Campaign::create([
+        Campaign::create([
             'title' => $validated['title'],
             'description' => $validated['description'],
             'target_amount' => $validated['target_amount'],
             'end_date' => $validated['end_date'] ?? null,
-            'image' => $imagePath ?: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=2070&auto=format&fit=crop',
-            'status' => 'Active', // Default to active when created
+            // Simpan path bersih ke database
+            'image' => $imagePath ?: null,
+            'status' => 'Active',
         ]);
 
         return redirect()->route('admin.campaigns.index')->with('success', 'Kampanye berhasil dibuat');
@@ -74,29 +76,25 @@ class CampaignController extends Controller
             'title' => 'required|max:255',
             'description' => 'required',
             'target_amount' => 'required|numeric|min:1000',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // max 5MB
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
             'end_date' => 'nullable|date',
         ]);
 
         $campaign = Campaign::findOrFail($id);
-
-        // Handle image upload
         $imagePath = $campaign->image;
+
         if ($request->hasFile('image')) {
-            // Delete old image if it's not the default
-            if ($campaign->image && !str_contains($campaign->image, 'unsplash.com')) {
-                $cleanPath = str_replace('storage/', 'public/', $campaign->image);
-                // If it starts with public/, just use it directly
-                if (!str_starts_with($cleanPath, 'public/')) {
-                    $cleanPath = 'public/' . $cleanPath;
-                }
-                Storage::disk('local')->delete($cleanPath);
+            // Hapus gambar lama (cek dulu biar ga hapus gambar dummy/unsplash)
+            if ($campaign->image && !str_contains($campaign->image, 'http')) {
+                // Hapus file lama dari disk public
+                Storage::disk('public')->delete($campaign->image);
             }
 
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
-            $newImage = $image->storeAs('public/campaigns', $imageName);
-            $imagePath = str_replace('public/', 'storage/', $newImage); // Convert to public path
+
+            // PERBAIKAN: Simpan ke disk public
+            $imagePath = $image->storeAs('campaigns', $imageName, 'public');
         }
 
         $campaign->update([

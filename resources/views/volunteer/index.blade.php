@@ -12,10 +12,10 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#1d4ed8', // biru utama
-                        secondary: '#3b82f6', // biru lebih muda
-                        accent: '#f59e0b', // warna aksen, misal: oranye
-                        softblue: '#f0f5ff', // background lebih soft
+                        primary: '#1d4ed8',
+                        secondary: '#3b82f6',
+                        accent: '#f59e0b',
+                        softblue: '#f0f5ff',
                     }
                 }
             }
@@ -26,7 +26,6 @@
             scroll-behavior: smooth;
         }
 
-        /* Style untuk panah di <details> (FAQ) */
         summary {
             list-style: none;
         }
@@ -34,33 +33,17 @@
         summary::-webkit-details-marker {
             display: none;
         }
-
-        summary::after {
-            content: '\f078';
-            /* Font Awesome chevron down */
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            float: right;
-            transition: transform 0.2s ease;
-        }
-
-        details[open] summary::after {
-            transform: rotate(180deg);
-        }
     </style>
 </head>
 
 <body class="bg-softblue font-sans">
 
-    {{-- Header (Sama seperti sebelumnya) --}}
     <header class="bg-white/80 backdrop-blur-sm shadow-sm fixed top-0 w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-            {{-- Logo --}}
             <a href="{{ url('/') }}" class="flex items-center space-x-2">
                 <img src="{{ asset('images/dongiv-logo.png') }}" alt="DonGiv Logo" class="h-8">
             </a>
 
-            {{-- Navigasi --}}
             <nav class="hidden md:flex items-center space-x-8 font-medium">
                 <a href="{{ url('/') }}#donasi" class="text-gray-700 hover:text-primary transition">Donasi</a>
                 <a href="{{ url('/') }}#" class="text-gray-700 hover:text-primary transition">Galang Dana</a>
@@ -69,7 +52,6 @@
                 <a href="{{ url('/') }}#" class="text-gray-700 hover:text-primary transition">Tentang Kami</a>
             </nav>
 
-            {{-- Tombol Auth --}}
             <div class="flex items-center space-x-3">
                 @guest
                 <a href="{{ route('login') }}" class="px-5 py-2 rounded-full font-semibold border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300">Masuk</a>
@@ -89,131 +71,166 @@
     </header>
 
     <main>
-        <style>
-            @keyframes waveMove {
-                0% {
-                    transform: translateX(0);
-                }
+        <section class="relative pt-32 pb-40 lg:pt-40 lg:pb-48 overflow-visible bg-surface">
 
-                100% {
-                    transform: translateX(-50%);
-                }
-            }
-
-            .wave-1 {
-                animation: waveMove 12s linear infinite;
-            }
-
-            .wave-2 {
-                animation: waveMove 18s linear infinite;
-            }
-        </style>
-
-        <section class="relative h-[65vh] md:h-[85vh] flex items-center justify-center text-white pt-20 overflow-hidden bg-gradient-to-b from-primary to-primary/70">
-
-            <!-- Overlay -->
-            <div class="absolute inset-0 bg-primary/60 z-10"></div>
-
-            <!-- Background Image -->
-            <img
-                src="https://images.unsplash.com/photo-1593113598332-cd288d649414?q=80&w=2070&auto=format&fit=crop"
-                class="absolute inset-0 w-full h-full object-cover opacity-20"
-                alt="Tim Relawan DonGiv Beraksi">
-
-            <!-- Content -->
-            <div class="relative z-20 text-center max-w-4xl mx-auto px-4">
-                <span class="inline-block bg-white/20 text-white text-sm font-semibold px-4 py-1 rounded-full mb-4 backdrop-blur-sm">
-                    Gabung #PasukanKebaikan
-                </span>
-
-                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4 drop-shadow-lg">
-                    Waktu Luangmu, Harapan Baru Mereka.
-                </h1>
-
-                <p class="text-lg md:text-xl mb-8 max-w-2xl mx-auto drop-shadow-md">
-                    Kami bukan cuma nyari relawan. Kami nyari kamu yang mau jadi bagian dari cerita perubahan. Jadilah tangan, mata, dan hati kebaikan bersama DonGiv.
-                </p>
-
-                <a
-                    href="{{ route('volunteer.register') }}"
-                    class="bg-accent hover:bg-amber-500 text-white font-bold py-3 px-8 rounded-full text-lg transition-transform hover:scale-105 shadow-lg">
-                    Gabung Sekarang
-                </a>
+            <div class="absolute top-0 right-0 -z-10 opacity-30 translate-x-1/2 -translate-y-1/4">
+                <svg viewBox="0 0 500 500" class="w-[800px] h-[800px] text-blue-100 fill-current animate-pulse" style="animation-duration: 10s;">
+                    <path d="M453.9,398.5C416.6,444.5,362.4,483.3,302.7,493.4C243,503.5,177.8,484.9,126.3,447.6C74.8,410.3,37,354.3,25.2,293.1C13.4,231.9,27.6,165.5,69.4,116.3C111.2,67.1,180.6,35.1,248.9,32.9C317.2,30.7,384.4,58.3,427.7,108.6C471,158.9,490.4,231.9,453.9,398.5Z" />
+                </svg>
             </div>
 
-            <!-- Animated Waves -->
-            <div class="absolute bottom-0 left-0 w-full h-[120px] overflow-hidden z-20">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-                <!-- Wave 1 -->
-                <svg class="wave-1 absolute bottom-0 left-0 w-[200%] h-full opacity-70" viewBox="0 0 1440 320" preserveAspectRatio="none">
-                    <path fill="#7aa2ff"
-                        d="M0,288L48,272C96,256,192,224,288,197.3C384,171,480,149,576,149.3C672,149,768,171,864,192C960,213,1056,235,1152,229.3C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
-                    </path>
-                </svg>
+                    <div class="max-w-2xl">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 border border-orange-100 text-accent font-bold text-xs uppercase tracking-wider mb-8">
+                            <i class="fas fa-fire"></i> Bergabung dengan 5.000+ Relawan
+                        </div>
 
-                <!-- Wave 2 -->
-                <svg class="wave-2 absolute bottom-0 left-0 w-[200%] h-full opacity-40" viewBox="0 0 1440 320" preserveAspectRatio="none">
-                    <path fill="#ffffff"
-                        d="M0,224L48,218.7C96,213,192,203,288,181.3C384,160,480,128,576,144C672,160,768,224,864,229.3C960,235,1056,181,1152,176C1248,171,1344,213,1392,234.7L1440,256L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z">
-                    </path>
-                </svg>
+                        <h1 class="text-5xl lg:text-7xl font-extrabold text-dark leading-[1.1] mb-6">
+                            Ubah Niat Baik <br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue-400">Jadi Aksi Nyata.</span>
+                        </h1>
 
+                        <p class="text-lg text-slate-500 mb-10 leading-relaxed">
+                            Dunia butuh lebih banyak orang peduli sepertimu. Pilih isumu, turun ke jalan, dan rasakan kebahagiaan yang tak ternilai harganya.
+                        </p>
+
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <a href="{{ route('volunteer.campaigns') }}" class="inline-flex justify-center items-center gap-3 bg-primary hover:bg-blue-700 text-white text-lg font-bold py-4 px-8 rounded-2xl transition-all transform hover:-translate-y-1 shadow-xl shadow-blue-200">
+                                Cari Misi Sekarang <i class="fas fa-arrow-right"></i>
+                            </a>
+                            <a href="#benefit" class="inline-flex justify-center items-center gap-3 bg-white border-2 border-slate-200 hover:border-primary text-slate-600 hover:text-primary font-bold py-4 px-8 rounded-2xl transition-all">
+                                <i class="far fa-play-circle text-xl"></i> Tonton Video
+                            </a>
+                        </div>
+
+                        <div class="mt-12 flex items-center gap-4">
+                            <div class="flex -space-x-4">
+                                <img class="w-12 h-12 rounded-full border-4 border-surface object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100" alt="">
+                                <img class="w-12 h-12 rounded-full border-4 border-surface object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100" alt="">
+                                <div class="w-12 h-12 rounded-full border-4 border-surface bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-600">+2k</div>
+                            </div>
+                            <div>
+                                <div class="flex text-yellow-400 text-sm mb-1">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                                <p class="text-sm text-slate-500 font-medium">Komunitas Relawan Terbaik</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative hidden lg:block">
+                        <div class="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white transform rotate-2 hover:rotate-0 transition-transform duration-500">
+                            <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?q=80&w=2074&auto=format&fit=crop"
+                                alt="Volunteer Team"
+                                class="w-full h-[500px] object-cover hover:scale-105 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                            <div class="absolute bottom-8 left-8 text-white">
+                                <p class="text-sm font-bold text-yellow-400 uppercase tracking-wider mb-1">Event Terakhir</p>
+                                <p class="text-2xl font-extrabold">Distribusi Pangan Desa</p>
+                            </div>
+                        </div>
+
+                        <div class="absolute -bottom-10 -right-8 z-20 bg-white p-5 rounded-2xl shadow-xl border border-slate-50 max-w-[200px]">
+                            <div class="flex items-center gap-2 mb-2">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100" class="w-8 h-8 rounded-full object-cover">
+                                <div>
+                                    <p class="text-xs font-bold text-dark">Raka A.</p>
+                                    <p class="text-[10px] text-slate-400">Baru bergabung</p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-600 italic">"Pengalaman seru banget bisa turun langsung!"</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="absolute -bottom-16 left-0 w-full z-20 px-6">
+                <div class="max-w-5xl mx-auto bg-white rounded-3xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] p-8 md:p-10 flex flex-col md:flex-row justify-around items-center gap-8 border border-slate-100">
+
+                    <div class="text-center">
+                        <p class="text-4xl md:text-5xl font-extrabold text-primary mb-1">1.200+</p>
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wide">Relawan Terdaftar</p>
+                    </div>
+
+                    <div class="hidden md:block w-px h-16 bg-slate-100"></div>
+
+                    <div class="text-center">
+                        <p class="text-4xl md:text-5xl font-extrabold text-dark mb-1">8.500+</p>
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wide">Jam Kontribusi</p>
+                    </div>
+
+                    <div class="hidden md:block w-px h-16 bg-slate-100"></div>
+
+                    <div class="text-center">
+                        <p class="text-4xl md:text-5xl font-extrabold text-green-600 mb-1">300+</p>
+                        <p class="text-sm font-bold text-slate-400 uppercase tracking-wide">Program Selesai</p>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <section class="bg-white py-16" id="stats-section">
-            <div class="max-w-6xl mx-auto px-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                    <div>
-                        <p class="text-4xl md:text-5xl font-extrabold text-primary" data-scramble-target="1,200+">0,000+</p>
-                        <p class="text-lg text-gray-600 mt-2">Relawan Terdaftar</p>
-                    </div>
-                    <div>
-                        <p class="text-4xl md:text-5xl font-extrabold text-primary" data-scramble-target="8,500+">0,000+</p>
-                        <p class="text-lg text-gray-600 mt-2">Jam Kontribusi</p>
-                    </div>
-                    <div>
-                        <p class="text-4xl md:text-5xl font-extrabold text-primary" data-scramble-target="300+">000+</p>
-                        <p class="text-lg text-gray-600 mt-2">Program Terselesaikan</p>
-                    </div>
-                </div>
+        <section class="py-24 bg-white border-t border-slate-200 relative">
+
+            <div class="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 opacity-30">
+                <div class="absolute top-[-10%] right-[-5%] w-96 h-96 bg-blue-50 rounded-full blur-3xl"></div>
+                <div class="absolute bottom-[-10%] left-[-5%] w-96 h-96 bg-orange-50 rounded-full blur-3xl"></div>
             </div>
-        </section>
 
-        <section class="py-20 bg-softblue">
             <div class="max-w-6xl mx-auto px-6">
-                <div class="text-center mb-16">
-                    <h2 class="text-3xl font-bold text-gray-800">Lebih dari Sekadar Membantu</h2>
-                    <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Ini bukan cuma soal ngasih waktu, tapi soal apa yang kamu dapetin kembali.</p>
+
+                <div class="text-center mb-20">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-dark mb-4">Lebih dari Sekadar Membantu</h2>
+                    <p class="text-slate-500 text-lg max-w-2xl mx-auto leading-relaxed">
+                        Ini bukan cuma soal ngasih waktu, tapi soal apa yang kamu dapetin kembali. Pengalaman, relasi, dan kebahagiaan.
+                    </p>
                 </div>
 
-                {{-- Poin 1: Dampak Nyata --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16">
-                    <div>
-                        {{-- Ganti dengan foto aksi nyata --}}
-                        <img src="https://images.unsplash.com/photo-1518395689561-9c603f0474b3?q=80&w=1974&auto=format&fit=crop" alt="Relawan Menyalurkan Bantuan" class="rounded-xl shadow-2xl w-full h-full object-cover">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-24">
+                    <div class="relative group">
+                        <div class="absolute -inset-4 bg-blue-50 rounded-[2.5rem] -z-10 transform rotate-3 transition-transform group-hover:rotate-0"></div>
+                        <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                            alt="Relawan Menyalurkan Bantuan"
+                            class="rounded-[2rem] shadow-2xl w-full h-auto object-cover transform transition-transform hover:scale-[1.02]">
                     </div>
+
                     <div>
-                        <i class="fas fa-heart text-primary text-3xl mb-4"></i>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Rasakan Dampak Nyata</h3>
-                        <p class="text-gray-600 mb-4">Kamu akan terlibat langsung di lapangan, melihat senyum penerima manfaat, dan jadi saksi bahwa bantuanmu sampai tepat sasaran.</p>
-                        <a href="#gabung-relawan" class="font-semibold text-primary hover:text-blue-800 transition">Lihat program kami <i class="fas fa-arrow-right ml-1"></i></a>
+                        <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center text-primary text-2xl mb-6 shadow-sm">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-extrabold text-dark mb-4">Rasakan Dampak Nyata</h3>
+                        <p class="text-slate-500 text-lg leading-relaxed mb-8">
+                            Kamu akan terlibat langsung di lapangan, melihat senyum penerima manfaat, dan jadi saksi bahwa bantuanmu sampai tepat sasaran. Bukan sekadar angka di layar.
+                        </p>
+                        <a href="{{ route('volunteer.campaigns') }}" class="inline-flex items-center font-bold text-primary hover:text-blue-700 transition group">
+                            Lihat program kami <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                        </a>
                     </div>
                 </div>
 
-                {{-- Poin 2: Jaringan & Skill --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                    <div class="md:order-last">
-                        {{-- Ganti dengan foto tim relawan --}}
-                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop" alt="Komunitas Relawan DonGiv" class="rounded-xl shadow-2xl w-full h-full object-cover">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                    <div class="order-2 lg:order-1">
+                        <div class="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center text-accent text-2xl mb-6 shadow-sm">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl font-extrabold text-dark mb-4">Keluarga & Keahlian Baru</h3>
+                        <p class="text-slate-500 text-lg leading-relaxed mb-8">
+                            Bertemu orang-orang se-frekuensi, bangun jaringan profesional, dan asah <em>soft-skill</em> baru (leadership, komunikasi, manajemen acara) yang gak diajarin di kampus.
+                        </p>
+                        <a href="#story-and-testimonial" class="inline-flex items-center font-bold text-primary hover:text-blue-700 transition group">
+                            Dengar cerita mereka <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                        </a>
                     </div>
-                    <div>
-                        <i class="fas fa-users text-primary text-3xl mb-4"></i>
-                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Keluarga & Keahlian Baru</h3>
-                        <p class="text-gray-600 mb-4">Bertemu orang-orang se-frekuensi, bangun jaringan profesional, dan asah *skill* baru (leadership, komunikasi, manajemen acara) yang gak diajarin di kampus.</p>
-                        <a href="#testimonial" class="font-semibold text-primary hover:text-blue-800 transition">Dengar cerita mereka <i class="fas fa-arrow-right ml-1"></i></a>
+
+                    <div class="order-1 lg:order-2 relative group">
+                        <div class="absolute -inset-4 bg-orange-50 rounded-[2.5rem] -z-10 transform -rotate-3 transition-transform group-hover:rotate-0"></div>
+                        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                            alt="Komunitas Relawan DonGiv"
+                            class="rounded-[2rem] shadow-2xl w-full h-auto object-cover transform transition-transform hover:scale-[1.02]">
                     </div>
                 </div>
+
             </div>
         </section>
 
@@ -269,7 +286,7 @@
                                 </p>
                                 <img src="https://i.pravatar.cc/150?img=11"
                                     class="w-16 h-16 rounded-full object-cover mb-3" alt="Relawan">
-                                <p class="font-bold text-gray-800 text-lg">Aisha Putri</p>
+                                <p class="font-bold text-gray-800 text-lg">Budi Santoso</p>
                                 <p class="text-sm text-gray-500">Relawan (Tim Edukasi)</p>
                             </div>
 
@@ -282,7 +299,7 @@
                                 </p>
                                 <img src="https://i.pravatar.cc/150?img=32"
                                     class="w-16 h-16 rounded-full object-cover mb-3" alt="Relawan">
-                                <p class="font-bold text-gray-800 text-lg">Budi Santoso</p>
+                                <p class="font-bold text-gray-800 text-lg">Aisha Putri</p>
                                 <p class="text-sm text-gray-500">Relawan (Tim Lapangan)</p>
                             </div>
 
@@ -348,308 +365,182 @@
         </script>
 
 
-        {{-- AREA FOKUS (Masih sama, tapi desain card dipermanis) --}}
-        <section class="py-20 bg-softblue">
-            <div class="max-w-6xl mx-auto px-6">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold text-gray-800">Cari Peran yang Paling 'Kamu Banget'</h2>
-                    <p class="text-gray-600 mt-2">Gak semua harus ke lapangan. Kontribusimu bisa dalam banyak bentuk.</p>
+        <section class="py-24 bg-slate-50 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-blue-100 rounded-full blur-3xl -mr-20 -mt-20 opacity-40 pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-96 h-96 bg-orange-100 rounded-full blur-3xl -ml-20 -mb-20 opacity-40 pointer-events-none"></div>
+
+            <div class="max-w-6xl mx-auto px-6 relative z-10">
+                <div class="text-center mb-16">
+                    <span class="inline-block py-1 px-3 rounded-full bg-blue-100 text-primary text-xs font-bold tracking-wider uppercase mb-4">
+                        Peran & Manfaat
+                    </span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
+                        Cari Peran yang Paling 'Kamu Banget'
+                    </h2>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                        Gak semua harus ke lapangan. Kontribusimu bisa dalam banyak bentuk, dan inilah yang akan kamu dapatkan kembali.
+                    </p>
                 </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {{-- Card 1 (di-desain ulang) --}}
-                    <div class="bg-white rounded-xl shadow-lg p-8 transform hover:scale-105 hover:shadow-xl transition-all duration-300">
-                        <div class="bg-accent/20 text-accent rounded-full w-16 h-16 flex items-center justify-center mb-5">
-                            <i class="fas fa-hands-helping fa-2x"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Relawan Lapangan</h3>
-                        <p class="text-gray-600">Turun langsung menyalurkan bantuan, asesmen kebutuhan, dan interaksi dengan penerima manfaat.</p>
-                    </div>
-                    {{-- Card 2 --}}
-                    <div class="bg-white rounded-xl shadow-lg p-8 transform hover:scale-105 hover:shadow-xl transition-all duration-300">
-                        <div class="bg-accent/20 text-accent rounded-full w-16 h-16 flex items-center justify-center mb-5">
-                            <i class="fas fa-camera fa-2x"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Tim Kreatif</h3>
-                        <p class="text-gray-600">Bantu bikin desain visual, video, dan konten media sosial yang nendang.</p>
-                    </div>
-                    {{-- Card 3 --}}
-                    <div class="bg-white rounded-xl shadow-lg p-8 transform hover:scale-105 hover:shadow-xl transition-all duration-300">
-                        <div class="bg-accent/20 text-accent rounded-full w-16 h-16 flex items-center justify-center mb-5">
-                            <i class="fas fa-chalkboard-teacher fa-2x"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Pengajar & Mentor</h3>
-                        <p class="text-gray-600">Berbagi ilmu dan keahlianmu di program-program edukasi kami.</p>
-                    </div>
-                    {{-- Card 4 --}}
-                    <div class="bg-white rounded-xl shadow-lg p-8 transform hover:scale-105 hover:shadow-xl transition-all duration-300">
-                        <div class="bg-accent/20 text-accent rounded-full w-16 h-16 flex items-center justify-center mb-5">
-                            <i class="fas fa-laptop-code fa-2x"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Dukungan Teknis</h3>
-                        <p class="text-gray-600">Punya *skill* IT, web, atau data? Bantuanmu sangat kami butuhkan!</p>
-                    </div>
-                    {{-- Card 5 --}}
-                    <div class="bg-white rounded-xl shadow-lg p-8 transform hover:scale-105 hover:shadow-xl transition-all duration-300">
-                        <div class="bg-accent/20 text-accent rounded-full w-16 h-16 flex items-center justify-center mb-5">
-                            <i class="fas fa-bullhorn fa-2x"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Penggalang Dana</h3>
-                        <p class="text-gray-600">Bantu kami menjangkau lebih banyak donatur dan partner kebaikan.</p>
-                    </div>
-                    {{-- Card 6 --}}
-                    <div class="bg-white rounded-xl shadow-lg p-8 transform hover:scale-105 hover:shadow-xl transition-all duration-300">
-                        <div class="bg-accent/20 text-accent rounded-full w-16 h-16 flex items-center justify-center mb-5">
-                            <i class="fas fa-calendar-check fa-2x"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Event & Logistik</h3>
-                        <p class="text-gray-600">Si paling jago ngatur acara dan memastikan semua berjalan mulus.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <section id="gabung-relawan" class="py-20 bg-white">
-            <div class="max-w-6xl mx-auto px-6">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold text-gray-800">3 Langkah Jadi #PasukanKebaikan</h2>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center relative">
-                    {{-- ... (Kode garis putus-putus) ... --}}
-                    <div class="hidden md:block absolute top-1/2 -translate-y-1/2 left-0 w-full h-0.5">
-                        <svg width="100%" height="2">
-                            <line x1="0" y1="1" x2="100%" y2="1" stroke="#d1d5db" stroke-width="2" stroke-dasharray="8 8" />
-                        </svg>
-                    </div>
-                    <div class="relative z-10 bg-white p-4">
-                        <div class_alias="flex justify-center items-center mb-4">
-                            <span class="flex items-center justify-center w-16 h-16 bg-primary text-white rounded-full text-2xl font-bold shadow-lg">1</span>
+                    <div class="group bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-blue-50 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="relative z-10">
+                            <div class="w-16 h-16 bg-blue-100 text-primary rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                                <i class="fas fa-hands-helping"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">Relawan Lapangan</h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                Turun langsung menyalurkan bantuan, asesmen kebutuhan, dan melihat senyum penerima manfaat secara langsung.
+                            </p>
                         </div>
-                        <h3 class="text-xl font-semibold mb-2">Isi Formulir</h3>
-                        <p class="text-gray-500">Klik 'Daftar Sekarang' dan isi data dirimu. Cuma 5 menit.</p>
-                    </div>
-                    <div class="relative z-10 bg-white p-4">
-                        <div class="flex justify-center items-center mb-4">
-                            <span class="flex items-center justify-center w-16 h-16 bg-primary text-white rounded-full text-2xl font-bold shadow-lg">2</span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2">Seleksi & Wawancara</h3>
-                        <p class="text-gray-500">Tim kami akan menghubungimu untuk ngobrol santai.</p>
-                    </div>
-                    <div class="relative z-10 bg-white p-4">
-                        <div class="flex justify-center items-center mb-4">
-                            <span class="flex items-center justify-center w-16 h-16 bg-primary text-white rounded-full text-2xl font-bold shadow-lg">3</span>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-2">Selamat Bergabung!</h3>
-                        <p class="text-gray-500">Kamu akan kami undang ke grup koordinasi dan siap beraksi.</p>
-                    </div>
-                </div>
-                <div class="text-center mt-16">
-                    <a href="{{ route('volunteer.register') }}" class="bg-primary hover:bg-blue-800 text-white font-bold py-4 px-10 rounded-full text-lg transition-transform hover:scale-105 shadow-lg">Daftar Sekarang</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="py-20 bg-primary text-white">
-            <div class="max-w-6xl mx-auto px-6 text-center">
-                <h2 class="text-3xl font-extrabold mb-4">Ini yang Kamu Bawa Pulang</h2>
-                <p class="text-lg opacity-90 mb-12 max-w-2xl mx-auto">
-                    Kami percaya kontribusimu sangat berharga. Ini apresiasi dari kami,
-                    selain hati yang (pastinya) gembira.
-                </p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-
-                    <!-- Benefit 1: Sertifikat -->
-                    <div class="bg-white/10 p-8 rounded-xl backdrop-blur-sm transform hover:scale-105 transition-transform">
-                        <div class="text-accent text-4xl mb-4">
-                            <i class="fas fa-certificate"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">Sertifikat Profesional</h3>
-                        <p class="text-sm opacity-80">
-                            Sertifikat resmi yang bisa lo pake buat nambahin "amunisi" di CV atau LinkedIn.
-                        </p>
                     </div>
 
-                    <!-- Benefit 2: Networking -->
-                    <div class="bg-white/10 p-8 rounded-xl backdrop-blur-sm transform hover:scale-105 transition-transform">
-                        <div class="text-accent text-4xl mb-4">
-                            <i class="fas fa-users"></i>
+                    <div class="group bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-orange-50 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="relative z-10">
+                            <div class="w-16 h-16 bg-orange-100 text-accent rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">Tim Kreatif</h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                Bantu bikin desain visual, video cinematic, dan konten media sosial yang nendang untuk menyebarkan kebaikan.
+                            </p>
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Jaringan & Mentoring</h3>
-                        <p class="text-sm opacity-80">
-                            Akses ke komunitas profesional, mentor, dan temen se-frekuensi dari berbagai industri.
-                        </p>
                     </div>
 
-                    <!-- Benefit 3: Skill Baru -->
-                    <div class="bg-white/10 p-8 rounded-xl backdrop-blur-sm transform hover:scale-105 transition-transform">
-                        <div class="text-accent text-4xl mb-4">
-                            <i class="fas fa-star"></i>
+                    <div class="group bg-white p-8 rounded-[2rem] shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-green-50 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        <div class="relative z-10">
+                            <div class="w-16 h-16 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-sm group-hover:scale-110 transition-transform">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 mb-3">Pengajar & Mentor</h3>
+                            <p class="text-gray-600 leading-relaxed">
+                                Berbagi ilmu dan keahlianmu di program-program edukasi kami untuk memberdayakan sesama.
+                            </p>
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Pengembangan Skill</h3>
-                        <p class="text-sm opacity-80">
-                            Belajar *leadership*, *project management*, dan komunikasi langsung di lapangan.
-                        </p>
                     </div>
 
-                    <!-- Benefit 4: Merchandise -->
-                    <div class="bg-white/10 p-8 rounded-xl backdrop-blur-sm transform hover:scale-105 transition-transform">
-                        <div class="text-accent text-4xl mb-4">
-                            <i class="fas fa-shirt"></i>
+                    <div class="lg:col-span-3 mt-8 p-8 md:p-12 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm text-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-50 via-white to-orange-50 opacity-50"></div>
+                        <div class="relative z-10 font-medium text-gray-800 text-lg md:text-xl leading-relaxed">
+                            <i class="fas fa-gift text-primary mr-2 text-2xl"></i>
+                            Dan pastinya: <span class="font-bold text-primary">E-Sertifikat Resmi</span>, jejaring profesional baru, dan <span class="font-bold text-accent">Merchandise Eksklusif</span> untuk setiap kontribusimu!
                         </div>
-                        <h3 class="text-xl font-bold mb-2">Merchandise Eksklusif</h3>
-                        <p class="text-sm opacity-80">
-                            Kit eksklusif #PasukanKebaikan (kaos, stiker, dll) sebagai tanda kebanggaanmu.
-                        </p>
                     </div>
 
                 </div>
             </div>
         </section>
 
-        {{-- FAQ (BARU) - Ini buat ngilangin "kurang yakin" --}}
-        <section class="py-20 bg-softblue">
-            <div class="max-w-4xl mx-auto px-6">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold text-gray-800">Masih Ragu?</h2>
-                    <p class="text-gray-600 mt-2">Kami jawab pertanyaan yang paling sering bikin penasaran.</p>
+
+        <section class="py-24 bg-white">
+
+            <style>
+                /* Target spesifik untuk mematikan panah bawaan */
+                details>summary {
+                    list-style: none !important;
+                }
+
+                details>summary::-webkit-details-marker {
+                    display: none !important;
+                }
+            </style>
+
+            <div class="max-w-3xl mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-extrabold text-gray-900 mb-4">Sering Ditanyakan</h2>
+                    <p class="text-gray-600 text-lg">Masih ragu? Temukan jawabannya di sini.</p>
                 </div>
-                <div class="bg-white rounded-xl shadow-xl p-6 md:p-8">
-                    <details class="border-b py-4">
-                        <summary class="text-lg font-semibold text-gray-800 cursor-pointer">Apakah saya harus punya keahlian khusus?</summary>
-                        <p class="mt-3 text-gray-600">Niat adalah keahlian utamamu! Kami punya banyak peran. Untuk peran teknis (seperti Tim Kreatif/IT), keahlian spesifik akan jadi nilai plus. Tapi untuk Tim Lapangan, yang penting semangat!</p>
-                    </details>
-                    <details class="border-b py-4">
-                        <summary class="text-lg font-semibold text-gray-800 cursor-pointer">Berapa banyak waktu yang harus saya luangkan?</summary>
-                        <p class="mt-3 text-gray-600">Fleksibel! Kami ada program berbasis proyek (sekali acara) dan ada yang rutin. Kamu bisa pilih yang paling sesuai dengan jadwalmu. Kami menghargai setiap menit waktumu.</p>
-                    </details>
-                    <details class="border-b py-4">
-                        <summary class="text-lg font-semibold text-gray-800 cursor-pointer">Apakah saya akan dapat sertifikat?</summary>
-                        <p class="mt-3 text-gray-600">Ya! Kami akan memberikan e-sertifikat sebagai tanda apresiasi atas kontribusimu setelah menyelesaikan periode atau program tertentu.</p>
-                    </details>
-                    <details class="py-4">
-                        <summary class="text-lg font-semibold text-gray-800 cursor-pointer">Saya di luar kota, apakah bisa gabung?</summary>
-                        <p class="mt-3 text-gray-600">Sangat bisa! Banyak peran di Tim Kreatif, Dukungan Teknis, atau Penggalang Dana yang bisa dilakukan 100% secara *remote* (online). Kebaikan gak kenal batas, kan?</p>
-                    </details>
+
+                <div class="space-y-4">
+                    <div class="bg-white rounded-2xl border border-slate-200 hover:border-primary/50 transition-colors duration-300 overflow-hidden shadow-sm hover:shadow-md group">
+                        <details class="p-6 cursor-pointer group">
+                            <summary class="list-none flex justify-between items-center font-bold text-lg text-gray-800 select-none">
+                                <span>Apakah saya harus punya keahlian khusus?</span>
+                                <span class="ml-4 flex-shrink-0 text-slate-400 transition-transform duration-300 group-open:rotate-180">
+                                    <i class="fas fa-chevron-down"></i>
+                                </span>
+                            </summary>
+                            <div class="mt-4 pt-4 border-t border-slate-100 text-gray-600 leading-relaxed animate-fade-in-down">
+                                <p>Niat adalah keahlian utamamu! Kami punya banyak peran. Untuk peran teknis (seperti Tim Kreatif/IT), keahlian spesifik akan jadi nilai plus. Tapi untuk Tim Lapangan, yang penting semangat!</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200 hover:border-primary/50 transition-colors duration-300 overflow-hidden shadow-sm hover:shadow-md group">
+                        <details class="p-6 cursor-pointer group">
+                            <summary class="list-none flex justify-between items-center font-bold text-lg text-gray-800 select-none">
+                                <span>Berapa banyak waktu yang harus diluangkan?</span>
+                                <span class="ml-4 flex-shrink-0 text-slate-400 transition-transform duration-300 group-open:rotate-180">
+                                    <i class="fas fa-chevron-down"></i>
+                                </span>
+                            </summary>
+                            <div class="mt-4 pt-4 border-t border-slate-100 text-gray-600 leading-relaxed animate-fade-in-down">
+                                <p>Fleksibel! Kami ada program berbasis proyek (sekali acara) dan ada yang rutin. Kamu bisa pilih yang paling sesuai dengan jadwalmu. Kami menghargai setiap menit waktumu.</p>
+                            </div>
+                        </details>
+                    </div>
+
+                    <div class="bg-white rounded-2xl border border-slate-200 hover:border-primary/50 transition-colors duration-300 overflow-hidden shadow-sm hover:shadow-md group">
+                        <details class="p-6 cursor-pointer group">
+                            <summary class="list-none flex justify-between items-center font-bold text-lg text-gray-800 select-none">
+                                <span>Apakah saya bisa mendaftar dari luar kota?</span>
+                                <span class="ml-4 flex-shrink-0 text-slate-400 transition-transform duration-300 group-open:rotate-180">
+                                    <i class="fas fa-chevron-down"></i>
+                                </span>
+                            </summary>
+                            <div class="mt-4 pt-4 border-t border-slate-100 text-gray-600 leading-relaxed animate-fade-in-down">
+                                <p>Sangat bisa! Banyak peran di Tim Kreatif, Dukungan Teknis, atau Penggalang Dana yang bisa dilakukan 100% secara <em>remote</em> (online). Kebaikan gak kenal batas, kan?</p>
+                            </div>
+                        </details>
+                    </div>
                 </div>
             </div>
         </section>
-
     </main>
 
-    {{-- FOOTER --}}
-    <footer class="bg-gray-800 text-gray-300">
-        <div class="max-w-7xl mx-auto py-16 px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
-                <div class="md:col-span-1">
-                    <h4 class="text-xl font-bold text-white mb-3">DonasiKita</h4>
-                    <p class="text-sm">Platform donasi online yang aman dan terpercaya untuk menghubungkan kebaikanmu dengan mereka yang membutuhkan.</p>
-                    <div class="flex space-x-4 mt-6">
-                        <a href="#" class="hover:text-white"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="hover:text-white"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="hover:text-white"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="hover:text-white"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
+    <footer class="bg-slate-900 border-t border-slate-800 pt-20 pb-10 text-slate-400">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+                <div class="col-span-1 md:col-span-1">
+                    <a href="{{ url('/') }}" class="block mb-6"><img src="{{ asset('images/dongiv-logo.png') }}" alt="DonGiv" class="h-8 brightness-0 invert"></a>
+                    <p class="text-sm leading-relaxed mb-6">Platform gotong royong digital untuk menghubungkan jutaan kebaikan. Aman, Mudah, Transparan.</p>
+                    <div class="flex gap-4"><a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-primary transition-colors"><i class="fab fa-instagram"></i></a><a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-primary transition-colors"><i class="fab fa-facebook-f"></i></a><a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-primary transition-colors"><i class="fab fa-twitter"></i></a></div>
                 </div>
                 <div>
-                    <h5 class="font-semibold text-white mb-4">Jelajahi</h5>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:underline">Kampanye Populer</a></li>
-                        <li><a href="#" class="hover:underline">Donasi Mendesak</a></li>
-                        <li><a href="#" class="hover:underline">Galang Dana</a></li>
-                        <li><a href="#" class="hover:underline">Blog</a></li>
+                    <h4 class="font-bold text-white mb-6">Program</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li><a href="#" class="hover:text-primary transition-colors">Donasi Medis</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Bencana Alam</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Pendidikan</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Zakat</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h5 class="font-semibold text-white mb-4">Tentang</h5>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:underline">Tentang Kami</a></li>
-                        <li><a href="#" class="hover:underline">Hubungi Kami</a></li>
-                        <li><a href="#" class="hover:underline">Kebijakan Privasi</a></li>
-                        <li><a href="#" class="hover:underline">Syarat & Ketentuan</a></li>
+                    <h4 class="font-bold text-white mb-6">Tentang</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li><a href="#" class="hover:text-primary transition-colors">Cerita Kami</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Laporan Keuangan</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Hubungi Kami</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h5 class="font-semibold text-white mb-4">Butuh Bantuan?</h5>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:underline">FAQ</a></li>
-                        <li><a href="mailto:support@donasikita.com" class="hover:underline">support@donasikita.com</a></li>
-                        <li><a href="tel:+62123456789" class="hover:underline">+62 123 456 789</a></li>
+                    <h4 class="font-bold text-white mb-6">Legal</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li><a href="#" class="hover:text-primary transition-colors">Syarat & Ketentuan</a></li>
+                        <li><a href="#" class="hover:text-primary transition-colors">Kebijakan Privasi</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="mt-12 border-t border-gray-700 pt-8 text-center text-sm">
-                <p>&copy; {{ date('Y') }} DonasiKita — Bersama Kita Wujudkan Harapan 💙</p>
+            <div class="border-t border-slate-800 pt-8 text-center flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs">&copy; {{ date('Y') }} DonGiv Indonesia. All rights reserved.</p>
+                <p class="text-xs">Dibuat dengan ❤️ untuk Kemanusiaan.</p>
             </div>
         </div>
     </footer>
-
-    {{-- Script Dropdown (Sama seperti sebelumnya) --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 1. Fungsi "Mesin Acak"
-            const scramble = (element) => {
-                const targetText = element.getAttribute('data-scramble-target');
-                const chars = '0123456789'; // Karakter buat ngacak
-                let iteration = 0;
-
-                // Hapus interval lama jika ada (buat jaga-jaga)
-                if (element.scrambleInterval) clearInterval(element.scrambleInterval);
-
-                element.scrambleInterval = setInterval(() => {
-                    element.innerText = element.innerText.split('')
-                        .map((char, index) => {
-                            // Kalo indexnya udah "kebuka", pake karakter asli
-                            if (index < iteration) {
-                                return targetText[index];
-                            }
-
-                            // Biarin koma dan plus tetep di tempatnya
-                            if (targetText[index] === ',' || targetText[index] === '+') {
-                                return targetText[index];
-                            }
-
-                            // Kalo belom, acak!
-                            return chars[Math.floor(Math.random() * chars.length)];
-                        })
-                        .join('');
-
-                    // Kalo udah selesai, beresin & stop
-                    if (iteration >= targetText.length) {
-                        clearInterval(element.scrambleInterval);
-                        element.innerText = targetText; // Pastiin 100% bener
-                    }
-
-                    // Nentuin seberapa cepet kebuka
-                    iteration += targetText.length / 15; // Selesai dalam ~15 frame
-                }, 50); // 50ms = seberapa cepet angkanya ganti
-            };
-
-            // 2. Fungsi "Mata-mata" (Intersection Observer)
-            const statsSection = document.getElementById('stats-section');
-            const scrambleElements = document.querySelectorAll('[data-scramble-target]');
-
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    // Kalo section-nya keliatan di layar
-                    if (entry.isIntersecting) {
-                        // Jalanin animasinya buat tiap angka
-                        scrambleElements.forEach(el => scramble(el));
-
-                        // Stop "mata-mata" nya biar gak ngulang animasi
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, {
-                threshold: 0.4 // Jalanin pas 40% section-nya keliatan
-            });
-
-            // 3. Mulai "mata-mata"
-            if (statsSection) {
-                observer.observe(statsSection);
-            }
-            // --- SELESAI KODE ANIMASI SCRAMBLE ---
-        });
-    </script>
 </body>
 
 </html>

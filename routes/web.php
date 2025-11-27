@@ -11,7 +11,7 @@ use App\Http\Controllers\VolunteerRegistrationController;
 // Controller Admin
 use App\Http\Controllers\Admin\CampaignController;
 use App\Http\Controllers\Admin\NotifikasiController;
-use App\Http\Controllers\Admin\VolunteerAdminController; // INI YANG BIKIN ERROR TADI
+use App\Http\Controllers\Admin\VolunteerAdminController;
 
 
 // Rute Autentikasi (Login/Register)
@@ -25,14 +25,21 @@ Route::post('/register', [RegisterController::class, 'register'])->name('registe
 // Rute Halaman Utama
 Route::get('/', [Controller::class, 'home'])->name('home');
 
-// Rute Halaman Relawan
-Route::get('/relawan', function () {
-    return view('volunteer.index');
-})->name('volunteer');
+// Rute Halaman Relawan (Arahkan ke Controller method index)
+Route::get('/relawan', [VolunteerRegistrationController::class, 'index'])->name('volunteer');
 
 // Rute Form Pendaftaran Relawan
 Route::get('/relawan/daftar', [VolunteerRegistrationController::class, 'create'])->name('volunteer.register');
 Route::post('/relawan/daftar', [VolunteerRegistrationController::class, 'store'])->name('volunteer.store');
+
+// 1. Halaman Intro 
+Route::get('/relawan', [VolunteerRegistrationController::class, 'index'])->name('volunteer');
+
+// 2. Halaman List Misi 
+Route::get('/relawan/misi', [VolunteerRegistrationController::class, 'listCampaigns'])->name('volunteer.campaigns');
+
+// 3. Proses Simpan Data 
+Route::post('/relawan/store', [VolunteerRegistrationController::class, 'store'])->name('volunteer.store');
 
 Route::middleware(['auth'])->group(function () {
 
