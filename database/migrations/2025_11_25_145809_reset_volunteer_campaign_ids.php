@@ -11,20 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Check if SQLite is being used
-        $driverName = DB::getDriverName();
-
+        // Get all volunteer campaigns ordered by their current ID
         $campaigns = DB::table('volunteer_campaigns')->orderBy('id')->get();
 
-        if ($driverName === 'sqlite') {
-            // For SQLite - disable foreign key constraints temporarily
-            DB::statement('PRAGMA foreign_keys = OFF;');
-        } else {
-            // For MySQL - disable foreign key checks
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        }
+        // Temporarily disable foreign key checks to allow ID changes
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-        // Create mapping of old IDs to new sequential IDs
+        // Store the current volunteer_campaign_id relationships
         $volunteerCampaignMap = [];
         foreach ($campaigns as $index => $campaign) {
             $newId = $index + 1;
@@ -35,13 +28,12 @@ return new class extends Migration
         $volunteers = DB::table('volunteers')->get();
 
         // Clear all volunteer_campaigns records
-        if ($driverName === 'sqlite') {
-            DB::statement('DELETE FROM volunteer_campaigns;');
-        } else {
-            DB::table('volunteer_campaigns')->truncate();
-        }
+        DB::table('volunteer_campaigns')->truncate();
 
-        // Re-insert campaigns with new sequential IDs
+        // Reset auto-increment to 1
+        DB::statement('ALTER TABLE volunteer_campaigns AUTO_INCREMENT = 1;');
+
+        // Re-insert campaigns with sequential IDs
         foreach ($campaigns as $index => $campaign) {
             $newId = $index + 1;
             DB::table('volunteer_campaigns')->insert([
@@ -66,13 +58,8 @@ return new class extends Migration
             }
         }
 
-        if ($driverName === 'sqlite') {
-            // Re-enable foreign key enforcement for SQLite
-            DB::statement('PRAGMA foreign_keys = ON;');
-        } else {
-            // Re-enable foreign key checks for MySQL
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-        }
+        // Re-enable foreign key checks
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 
     /**

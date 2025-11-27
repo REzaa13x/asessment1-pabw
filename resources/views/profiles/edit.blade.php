@@ -15,128 +15,39 @@
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-    <style>
-        .profile-form-card {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            transition: all 0.3s ease;
-        }
-        .profile-form-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .text-gray-800 {
-            color: #1f2937;
-        }
-        .text-gray-600 {
-            color: #4b5563;
-        }
-        .text-gray-700 {
-            color: #374151;
-        }
-        .bg-gradient-to-br.from-white.to-blue-50 {
-            background: linear-gradient(to bottom right, #ffffff, #dbeafe);
-        }
-        .bg-gradient-to-r.from-blue-600.to-blue-700 {
-            background: linear-gradient(to right, #2563eb, #1d4ed8);
-        }
-        .bg-gradient-to-r.from-blue-600.to-blue-700:hover {
-            background: linear-gradient(to right, #1d4ed8, #1e40af);
-        }
-        .bg-gradient-to-r.from-green-50.to-emerald-50 {
-            background: linear-gradient(to right, #f0fdf4, #ecfdf5);
-        }
-        .border-l-4.border-green-500 {
-            border-left-color: #22c55e;
-        }
-        .text-green-700 {
-            color: #15803d;
-        }
-        .bg-gradient-to-r.from-gray-500.to-gray-600 {
-            background: linear-gradient(to right, #6b7280, #4b5563);
-        }
-        .bg-gradient-to-r.from-gray-600.to-gray-700 {
-            background: linear-gradient(to right, #4b5563, #374151);
-        }
-        .shadow-xl {
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .shadow-lg {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-    </style>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-cyan-50 text-gray-800">
     <!-- Header -->
-    <header class="bg-white/80 backdrop-blur-sm shadow-sm fixed top-0 w-full z-50 transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-                <img src="{{ asset('images/dongiv-logo.png') }}" alt="DonGiv Logo" class="h-8">
-            </div>
-
-            <nav class="hidden md:flex items-center space-x-8 font-medium">
-                <a href="{{ route('home') }}" class="text-gray-700 hover:text-primary transition">Beranda</a>
-                <a href="{{ route('campaigns.all') }}" class="text-gray-700 hover:text-primary transition">Donasi</a>
-                <a href="#" class="text-gray-700 hover:text-primary transition">Galang Dana</a>
-                <a href="#" class="text-gray-700 hover:text-primary transition">Relawan</a>
-                <a href="#" class="text-gray-700 hover:text-primary transition">Cara Kerja</a>
-                <a href="#" class="text-gray-700 hover:text-primary transition">Tentang Kami</a>
-            </nav>
-            <div class="flex items-center space-x-3">
-                <!-- Search bar -->
-                <div class="hidden md:flex items-center">
-                    <input type="text" placeholder="Cari sesuatu..." class="px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-                    <button class="ml-2 bg-primary text-white px-4 py-2 rounded-full hover:bg-blue-800">
-                        <i class="fas fa-search"></i>
-                    </button>
+    <header class="bg-white shadow-sm py-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <img src="{{ asset('images/dongiv-logo.png') }}" alt="DonGiv Logo" class="h-8">
+                    <span class="text-xl font-bold text-primary">DonGiv</span>
                 </div>
-
-                @auth
-                <!-- Profile dropdown when user is logged in -->
-                <div class="relative">
-                    <button id="profileButton" class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-semibold hover:bg-blue-200 transition-colors" type="button">
-                        <span class="font-bold">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</span>
-                    </button>
-                    <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
-                        <a href="{{ route('profiles.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                            <i class="fas fa-user mr-2"></i>Profil Saya
-                        </a>
-                        <form method="POST" action="{{ route('logout') }}" id="logout-form" style="display: none;">
-                            @csrf
-                        </form>
-                        <a href="{{ route('logout') }}"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors">
-                            <i class="fas fa-sign-out-alt mr-2"></i>Keluar
-                        </a>
-                    </div>
-                </div>
-                @else
-                <!-- Login and Register buttons when user is not logged in -->
-                <a href="{{ route('login') }}" class="px-5 py-2 rounded-full font-semibold border border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300">Masuk</a>
-                <a href="{{ route('register') }}" class="px-5 py-2 rounded-full font-semibold bg-primary text-white hover:bg-blue-800 transition-all duration-300">Daftar</a>
-                @endauth
+                <a href="{{ route('home') }}" class="text-gray-700 hover:text-primary font-medium transition">
+                    <i class="fas fa-home mr-1"></i>Beranda
+                </a>
             </div>
         </div>
     </header>
 
-    <div class="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 pt-24 pb-8">
+    <div class="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 py-8">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-8">
                 <h1 class="text-3xl md:text-4xl font-bold text-gray-800">Edit Profil</h1>
                 <p class="text-gray-600">Perbarui informasi akun Anda</p>
             </div>
 
-            <div class="profile-form-card bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-xl p-6 md:p-8 border border-gray-200/50 backdrop-blur-sm">
+            <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
                 @if(session('success'))
-                    <div class="mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 text-green-700 px-6 py-4 rounded-xl shadow-md">
+                    <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl">
                         <div class="flex items-start">
-                            <div class="flex-shrink-0 mr-4">
-                                <i class="fas fa-check-circle text-2xl mt-1 text-green-600"></i>
+                            <div class="flex-shrink-0 mr-3">
+                                <i class="fas fa-check-circle text-xl mt-1"></i>
                             </div>
                             <div>
-                                <p class="font-bold text-lg">Sukses!</p>
-                                <p class="">{{ session('success') }}</p>
+                                <p class="font-medium">{{ session('success') }}</p>
                             </div>
                         </div>
                     </div>
@@ -221,7 +132,7 @@
                         <button type="submit" class="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] shadow-lg">
                             <i class="fas fa-save mr-2"></i>Simpan Perubahan
                         </button>
-                        <a href="{{ route('profiles.index') }}" class="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 text-center">
+                        <a href="{{ route('profiles.index') }}" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-xl transition-all duration-300 text-center">
                             <i class="fas fa-arrow-left mr-2"></i>Batal
                         </a>
                     </div>
@@ -269,27 +180,5 @@
             </div>
         </div>
     </footer>
-
-    <script>
-        // Profile dropdown functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const profileButton = document.getElementById('profileButton');
-            const profileDropdown = document.getElementById('profileDropdown');
-
-            if (profileButton && profileDropdown) {
-                profileButton.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    profileDropdown.classList.toggle('hidden');
-                });
-
-                // Close dropdown when clicking outside
-                document.addEventListener('click', function(e) {
-                    if (!profileButton.contains(e.target) && !profileDropdown.contains(e.target)) {
-                        profileDropdown.classList.add('hidden');
-                    }
-                });
-            }
-        });
-    </script>
 </body>
 </html>
