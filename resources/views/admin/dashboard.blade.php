@@ -131,6 +131,14 @@
                     <i class="fas fa-donate"></i>
                     <span>Kampanye Donasi</span>
                 </a>
+                <a href="{{ route('admin.relawan.index') }}" class="nav-item flex items-center space-x-3 py-3 px-4 mb-2">
+                    <i class="fas fa-hands-helping"></i>
+                    <span>Kampanye Relawan</span>
+                </a>
+                <a href="{{ route('admin.verifikasi-relawan.index') }}" class="nav-item flex items-center space-x-3 py-3 px-4 mb-2">
+                    <i class="fas fa-user-check"></i>
+                    <span>Verifikasi Relawan</span>
+                </a>
                 <a href="{{ route('admin.notifications.index') }}" class="nav-item flex items-center space-x-3 py-3 px-4 mb-2">
                     <i class="fas fa-bell"></i>
                     <span>Notifikasi</span>
@@ -206,13 +214,13 @@
                 <div class="content">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-600 font-medium">Donatur</p>
-                            <p class="text-3xl font-bold text-primary mt-1">1.240</p>
+                            <p class="text-gray-600 font-medium">Relawan Terdaftar</p>
+                            <p class="text-3xl font-bold text-primary mt-1">124</p>
                             <div class="mt-2">
                                 <div class="progress-bar">
                                     <div class="progress-fill bg-purple-500" style="width: 85%"></div>
                                 </div>
-                                <p class="text-xs text-gray-500 mt-1">Naik 15% dari bulan lalu</p>
+                                <p class="text-xs text-gray-500 mt-1">Naik 8% dari bulan lalu</p>
                             </div>
                         </div>
                         <div class="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center">
@@ -226,17 +234,17 @@
                 <div class="content">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-600 font-medium">Donasi Hari Ini</p>
-                            <p class="text-3xl font-bold text-primary mt-1">Rp 2.450.000</p>
+                            <p class="text-gray-600 font-medium">Kampanye Relawan</p>
+                            <p class="text-3xl font-bold text-primary mt-1">8</p>
                             <div class="mt-2">
                                 <div class="progress-bar">
                                     <div class="progress-fill bg-yellow-500" style="width: 45%"></div>
                                 </div>
-                                <p class="text-xs text-gray-500 mt-1">12 donasi masuk</p>
+                                <p class="text-xs text-gray-500 mt-1">2 kampanye aktif</p>
                             </div>
                         </div>
                         <div class="w-14 h-14 bg-yellow-100 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-chart-line text-yellow-600 text-xl"></i>
+                            <i class="fas fa-people-group text-yellow-600 text-xl"></i>
                         </div>
                     </div>
                 </div>
@@ -271,19 +279,19 @@
                         <i class="fas fa-plus text-green-600"></i>
                     </div>
                     <div class="flex-1">
-                        <p class="font-medium text-gray-800">Kampanye baru dibuat</p>
-                        <p class="text-gray-600 text-sm">Kampanye "Bantu Anak Pintar" dibuat oleh admin</p>
+                        <p class="font-medium text-gray-800">Kampanye relawan baru dibuat</p>
+                        <p class="text-gray-600 text-sm">Kampanye "Gotong Royong Lingkungan" dibuat oleh admin</p>
                         <p class="text-gray-400 text-sm">10 menit yang lalu</p>
                     </div>
                 </div>
                 <div class="flex items-start space-x-4 p-4 rounded-lg hover:bg-blue-50 transition-colors">
                     <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <i class="fas fa-money-bill-wave text-blue-600"></i>
+                        <i class="fas fa-user-check text-blue-600"></i>
                     </div>
                     <div class="flex-1">
-                        <p class="font-medium text-gray-800">Donasi masuk</p>
-                        <p class="text-gray-600 text-sm">Donasi sebesar Rp 500.000 dari Budi Santoso</p>
-                        <p class="text-gray-400 text-sm">1 jam yang lalu</p>
+                        <p class="font-medium text-gray-800">Relawan baru terdaftar</p>
+                        <p class="text-gray-600 text-sm">Susi Kurnia mendaftar sebagai relawan</p>
+                        <p class="text-gray-400 text-sm">30 menit yang lalu</p>
                     </div>
                 </div>
                 <div class="flex items-start space-x-4 p-4 rounded-lg hover:bg-blue-50 transition-colors">
@@ -301,9 +309,9 @@
                         <i class="fas fa-check-circle text-yellow-600"></i>
                     </div>
                     <div class="flex-1">
-                        <p class="font-medium text-gray-800">Kampanye selesai</p>
-                        <p class="text-gray-600 text-sm">Kampanye "Bencana Banjir Jakarta" mencapai target</p>
-                        <p class="text-gray-400 text-sm">5 jam yang lalu</p>
+                        <p class="font-medium text-gray-800">Relawan disetujui</p>
+                        <p class="text-gray-600 text-sm">Relawan Budi Santoso disetujui untuk kampanye</p>
+                        <p class="text-gray-400 text-sm">4 jam yang lalu</p>
                     </div>
                 </div>
             </div>
@@ -312,22 +320,18 @@
         <!-- Quick Actions -->
         <div class="card p-6 rounded-xl fade-in">
             <h3 class="text-xl font-bold text-gray-800 mb-4">Aksi Cepat</h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <a href="{{ route('admin.campaigns.create') }}" class="bg-blue-100 hover:bg-blue-200 text-blue-800 py-3 px-4 rounded-lg text-center transition-colors">
                     <i class="fas fa-plus-circle block text-xl mb-2"></i>
                     <span class="font-medium">Tambah Kampanye</span>
                 </a>
-                <a href="{{ route('admin.notifications.index') }}" class="bg-green-100 hover:bg-green-200 text-green-800 py-3 px-4 rounded-lg text-center transition-colors">
-                    <i class="fas fa-bell block text-xl mb-2"></i>
-                    <span class="font-medium">Notifikasi</span>
+                <a href="{{ route('admin.relawan.create') }}" class="bg-green-100 hover:bg-green-200 text-green-800 py-3 px-4 rounded-lg text-center transition-colors">
+                    <i class="fas fa-users block text-xl mb-2"></i>
+                    <span class="font-medium">Kampanye Relawan</span>
                 </a>
-                <a href="#" class="bg-purple-100 hover:bg-purple-200 text-purple-800 py-3 px-4 rounded-lg text-center transition-colors">
-                    <i class="fas fa-chart-bar block text-xl mb-2"></i>
-                    <span class="font-medium">Laporan</span>
-                </a>
-                <a href="#" class="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 py-3 px-4 rounded-lg text-center transition-colors">
-                    <i class="fas fa-cog block text-xl mb-2"></i>
-                    <span class="font-medium">Pengaturan</span>
+                <a href="{{ route('admin.relawan.index') }}" class="bg-purple-100 hover:bg-purple-200 text-purple-800 py-3 px-4 rounded-lg text-center transition-colors">
+                    <i class="fas fa-hands-helping block text-xl mb-2"></i>
+                    <span class="font-medium">Lihat Kampanye</span>
                 </a>
             </div>
         </div>

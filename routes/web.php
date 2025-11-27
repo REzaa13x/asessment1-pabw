@@ -68,8 +68,29 @@ Route::middleware(['auth'])->group(function () {
         // Rute CRUD Admin (Resource)
         Route::resource('campaigns', CampaignController::class);
         Route::resource('notifications', NotifikasiController::class);
-
-        // INI YANG PINDAH: CRUD Volunteers HARUS di dalem group admin
         Route::resource('volunteers', VolunteerAdminController::class);
     });
 });
+
+// ADMIN – Kampanye Relawan
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/relawan', [\App\Http\Controllers\Admin\VolunteerCampaignController::class, 'index'])->name('relawan.index');
+    Route::get('/relawan/tambah', [\App\Http\Controllers\Admin\VolunteerCampaignController::class, 'create'])->name('relawan.create');
+    Route::post('/relawan/store', [\App\Http\Controllers\Admin\VolunteerCampaignController::class, 'store'])->name('relawan.store');
+    Route::get('/relawan/{id}', [\App\Http\Controllers\Admin\VolunteerCampaignController::class, 'show'])->name('relawan.show');
+    Route::get('/relawan/{id}/edit', [\App\Http\Controllers\Admin\VolunteerCampaignController::class, 'edit'])->name('relawan.edit');
+    Route::put('/relawan/{id}', [\App\Http\Controllers\Admin\VolunteerCampaignController::class, 'update'])->name('relawan.update');
+    Route::post('/relawan/{id}/toggle-status', [\App\Http\Controllers\Admin\VolunteerCampaignController::class, 'toggleStatus'])->name('relawan.toggle-status');
+    Route::delete('/relawan/{id}', [\App\Http\Controllers\Admin\VolunteerCampaignController::class, 'destroy'])->name('relawan.delete');
+
+    // ADMIN - Verifikasi Pendaftaran Relawan
+    Route::prefix('verifikasi-relawan')->name('verifikasi-relawan.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\VolunteerVerificationController::class, 'index'])->name('index');
+        Route::get('/campaign/{campaignId}', [\App\Http\Controllers\Admin\VolunteerVerificationController::class, 'showByCampaign'])->name('by-campaign');
+        Route::get('/{id}', [\App\Http\Controllers\Admin\VolunteerVerificationController::class, 'show'])->name('show');
+        Route::post('/{id}/verify', [\App\Http\Controllers\Admin\VolunteerVerificationController::class, 'verify'])->name('verify');
+        Route::post('/{id}/reject', [\App\Http\Controllers\Admin\VolunteerVerificationController::class, 'reject'])->name('reject');
+        Route::delete('/{id}', [\App\Http\Controllers\Admin\VolunteerVerificationController::class, 'destroy'])->name('destroy');
+    });
+});
+

@@ -67,40 +67,53 @@
         <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
             <a href="{{ url('/') }}" class="flex items-center space-x-2">
                 <img src="{{ asset('images/dongiv-logo.png') }}" alt="DonGiv Logo" class="h-8">
-            </a>
-            <nav class="hidden md:flex items-center space-x-8 font-medium text-gray-700">
-                <a href="#donasi" class="hover:text-primary transition">Donasi</a>
-                <a href="#alur" class="hover:text-primary transition">Transparansi</a>
-                <a href="{{ route('volunteer') }}" class="text-primary font-semibold hover:text-blue-800 transition">Relawan</a>
-                <a href="#testimoni" class="hover:text-primary transition">Kata Mereka</a>
-                <a href="#faq" class="hover:text-primary transition">FAQ</a>
-            </nav>
-            <div class="flex items-center space-x-3">
-                @auth
-                <div class="relative group">
-                    <button class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-semibold hover:bg-blue-200 transition-colors border border-blue-200">
-                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                    </button>
-                    <div class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-100 py-2 hidden group-hover:block z-50">
-                        <div class="px-4 py-3 border-b border-slate-50 mb-1 bg-slate-50/50">
-                            <p class="text-xs text-slate-400 font-medium">Halo, {{ explode(' ', auth()->user()->name)[0] }}!</p>
-                        </div>
-                        <a href="{{ route('profiles.index') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-primary transition">
-                            <i class="fas fa-user-edit w-4"></i> Edit Profil
-                        </a>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="w-full text-left flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition font-medium">
-                                <i class="fas fa-sign-out-alt w-4"></i> Keluar
-                            </button>
-                        </form>
+                <<<<<<< HEAD
+                    </a>
+                    <nav class="hidden md:flex items-center space-x-8 font-medium text-gray-700">
+                        <a href="#donasi" class="hover:text-primary transition">Donasi</a>
+                        <a href="#alur" class="hover:text-primary transition">Transparansi</a>
+                        <a href="{{ route('volunteer') }}" class="text-primary font-semibold hover:text-blue-800 transition">Relawan</a>
+                        <a href="#testimoni" class="hover:text-primary transition">Kata Mereka</a>
+                        <a href="#faq" class="hover:text-primary transition">FAQ</a>
+                        =======
+        </div>
+
+        <nav class="hidden md:flex items-center space-x-8 font-medium">
+            <a href="#donasi" class="text-gray-700 hover:text-primary transition">Donasi</a>
+            <a href="#" class="text-gray-700 hover:text-primary transition">Galang Dana</a>
+
+            <a href="#volunteer-campaigns" class="text-gray-700 hover:text-primary transition">Relawan</a>
+
+            <a href="#cara-kerja" class="text-gray-700 hover:text-primary transition">Cara Kerja</a>
+            <a href="#" class="text-gray-700 hover:text-primary transition">Tentang Kami</a>
+            >>>>>>> d60afdda2274c245aaab03e01243e16bcb42db26
+        </nav>
+        <div class="flex items-center space-x-3">
+            @auth
+            <div class="relative group">
+                <button class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 font-semibold hover:bg-blue-200 transition-colors border border-blue-200">
+                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                </button>
+                <div class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-100 py-2 hidden group-hover:block z-50">
+                    <div class="px-4 py-3 border-b border-slate-50 mb-1 bg-slate-50/50">
+                        <p class="text-xs text-slate-400 font-medium">Halo, {{ explode(' ', auth()->user()->name)[0] }}!</p>
                     </div>
+                    <a href="{{ route('profiles.index') }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:bg-blue-50 hover:text-primary transition">
+                        <i class="fas fa-user-edit w-4"></i> Edit Profil
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="w-full text-left flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition font-medium">
+                            <i class="fas fa-sign-out-alt w-4"></i> Keluar
+                        </button>
+                    </form>
                 </div>
-                @else
-                <a href="{{ route('login') }}" class="px-6 py-2 rounded-full font-semibold border border-primary text-primary hover:bg-blue-50 transition-all duration-300">Masuk</a>
-                <a href="{{ route('register') }}" class="px-6 py-2 rounded-full font-semibold bg-primary text-white hover:bg-blue-800 transition-all duration-300 shadow-md hover:shadow-lg">Daftar</a>
-                @endauth
             </div>
+            @else
+            <a href="{{ route('login') }}" class="px-6 py-2 rounded-full font-semibold border border-primary text-primary hover:bg-blue-50 transition-all duration-300">Masuk</a>
+            <a href="{{ route('register') }}" class="px-6 py-2 rounded-full font-semibold bg-primary text-white hover:bg-blue-800 transition-all duration-300 shadow-md hover:shadow-lg">Daftar</a>
+            @endauth
+        </div>
         </div>
     </header>
 
