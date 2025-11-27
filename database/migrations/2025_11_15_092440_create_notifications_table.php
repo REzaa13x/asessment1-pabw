@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::dropIfExists('admin_notifications'); // Remove if exists from previous incomplete migration
         Schema::create('admin_notifications', function (Blueprint $table) {
             $table->id();
             $table->string('title');
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists('admin_notifications');
     }
 };

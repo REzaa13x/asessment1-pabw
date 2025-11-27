@@ -145,29 +145,33 @@
                     <p class="text-gray-600 mt-2">Pilih kampanye yang ingin kamu bantu dan jadilah bagian dari perubahan.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     @if(isset($campaigns) && !empty($campaigns))
-                    @foreach($campaigns as $campaign)
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-                        <img src="{{ $campaign->image }}" class="w-full h-52 object-cover" alt="{{ $campaign->title }}">
-                        <div class="p-6 flex flex-col flex-grow">
-                            <span class="bg-blue-100 text-primary text-xs font-semibold px-2.5 py-1 rounded-full self-start mb-3">{{ $campaign->status }}</span>
-                            <h3 class="font-bold text-lg text-gray-800 mb-2">{{ $campaign->title }}</h3>
-                            <p class="text-sm text-gray-500 mb-4">oleh <span class="font-semibold text-primary">DonGiv</span></p>
+                        @foreach($campaigns->take(4) as $campaign)  <!-- Display only first 4 campaigns -->
+                        <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                            @if($campaign->image && !filter_var($campaign->image, FILTER_VALIDATE_URL))
+                                <img src="{{ asset('storage/' . ltrim($campaign->image, '/')) }}" class="w-full h-52 object-cover" alt="{{ $campaign->title }}" onerror="this.onerror=null; this.src='https://placehold.co/600x400?text=Campaign+Image';">
+                            @else
+                                <img src="{{ $campaign->image ?? 'https://placehold.co/600x400?text=Campaign+Image' }}" class="w-full h-52 object-cover" alt="{{ $campaign->title }}">
+                            @endif
+                            <div class="p-6 flex flex-col flex-grow">
+                                <span class="bg-blue-100 text-primary text-xs font-semibold px-2.5 py-1 rounded-full self-start mb-3">{{ $campaign->status }}</span>
+                                <h3 class="font-bold text-lg text-gray-800 mb-2">{{ $campaign->title }}</h3>
+                                <p class="text-sm text-gray-500 mb-4">oleh <span class="font-semibold text-primary">DonGiv</span></p>
 
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
-                                <div class="bg-accent h-2.5 rounded-full" style="width: {{ min(100, ($campaign->current_amount / $campaign->target_amount) * 100) }}%"></div>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2">
+                                    <div class="bg-accent h-2.5 rounded-full" style="width: {{ min(100, ($campaign->current_amount / $campaign->target_amount) * 100) }}%"></div>
+                                </div>
+
+                                <div class="flex justify-between text-sm mb-4">
+                                    <p class="font-semibold">Terkumpul: <span class="text-gray-800">Rp {{ number_format($campaign->current_amount, 0, ',', '.') }}</span></p>
+                                    <p class="text-gray-500">{{ $campaign->end_date ? $campaign->end_date->format('d/m/Y') : 'Tidak ada batas' }}</p>
+                                </div>
+
+                                <a href="{{ route('donation.details', ['campaign' => $campaign->id]) }}" class="w-full mt-auto bg-primary text-white font-bold py-2.5 px-4 rounded-lg hover:bg-blue-800 transition-colors block text-center">Donasi Sekarang</a>
                             </div>
-
-                            <div class="flex justify-between text-sm mb-4">
-                                <p class="font-semibold">Terkumpul: <span class="text-gray-800">Rp {{ number_format($campaign->current_amount, 0, ',', '.') }}</span></p>
-                                <p class="text-gray-500">{{ $campaign->end_date ? $campaign->end_date->format('d/m/Y') : 'Tidak ada batas' }}</p>
-                            </div>
-
-                            <button class="w-full mt-auto bg-primary text-white font-bold py-2.5 px-4 rounded-lg hover:bg-blue-800 transition-colors">Donasi Sekarang</button>
                         </div>
-                    </div>
-                    @endforeach
+                        @endforeach
                     @else
                     <div class="col-span-full text-center py-12">
                         <div class="mx-auto w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mb-6">
@@ -178,9 +182,9 @@
                     </div>
                     @endif
                 </div>
-                @if(isset($campaigns) && !empty($campaigns))
+                @if(isset($campaigns) && count($campaigns) > 0)
                 <div class="text-center mt-12">
-                    <a href="#" class="text-primary font-semibold hover:underline">Lihat Semua Kampanye <i class="fas fa-arrow-right ml-1"></i></a>
+                    <a href="{{ route('campaigns.all') }}" class="text-primary font-semibold hover:underline">Lihat Semua Kampanye <i class="fas fa-arrow-right ml-1"></i></a>
                 </div>
                 @endif
             </div>

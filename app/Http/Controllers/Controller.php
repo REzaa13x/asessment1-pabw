@@ -13,7 +13,7 @@ class Controller extends BaseController
 
     public function home()
     {
-        // Get campaigns from the database
+        // Get all active campaigns from the database (will be limited in the view)
         $campaigns = Campaign::where('status', 'Active')->get();
 
         // Get active volunteer campaigns from the database

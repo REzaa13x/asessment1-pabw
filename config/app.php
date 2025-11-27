@@ -123,4 +123,8 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'bank_account_name' => env('BANK_ACCOUNT_NAME', 'Organisasi Amal DonGiv'),
+    'bank_account_number' => env('BANK_ACCOUNT_NUMBER', '1234567890'),
+    'bank_name' => env('BANK_NAME', 'Bank Mandiri'),
+
 ];

@@ -127,6 +127,10 @@
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </a>
+                <a href="{{ route('admin.donations.index') }}" class="nav-item flex items-center space-x-3 py-3 px-4 mb-2">
+                    <i class="fas fa-money-check-alt"></i>
+                    <span>Verifikasi Donasi</span>
+                </a>
                 <a href="{{ route('admin.campaigns.index') }}" class="nav-item flex items-center space-x-3 py-3 px-4 mb-2">
                     <i class="fas fa-donate"></i>
                     <span>Kampanye Donasi</span>

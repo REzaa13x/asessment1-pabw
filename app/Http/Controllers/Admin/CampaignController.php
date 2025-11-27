@@ -41,13 +41,13 @@ class CampaignController extends Controller
             'end_date' => 'nullable|date',
         ]);
 
-        // Handle image upload
-        $imagePath = null;
+        // Handle image upload - store in campaigns directory
         if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $imagePath = $image->storeAs('public/campaigns', $imageName);
-            $imagePath = str_replace('public/', 'storage/', $imagePath); // Convert to public path
+            $path = $request->file('image')->store('campaigns', 'public');
+            // $path will be in format 'campaigns/filename.jpg'
+            $imagePath = $path;
+        } else {
+            $imagePath = 'campaigns/default.jpg'; // Default fallback
         }
 
         $campaign = Campaign::create([
@@ -55,7 +55,7 @@ class CampaignController extends Controller
             'description' => $validated['description'],
             'target_amount' => $validated['target_amount'],
             'end_date' => $validated['end_date'] ?? null,
-            'image' => $imagePath ?: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=2070&auto=format&fit=crop',
+            'image' => $imagePath,
             'status' => 'Active', // Default to active when created
         ]);
 
@@ -80,23 +80,17 @@ class CampaignController extends Controller
 
         $campaign = Campaign::findOrFail($id);
 
-        // Handle image upload
+        // Handle image upload - store in campaigns directory
         $imagePath = $campaign->image;
         if ($request->hasFile('image')) {
-            // Delete old image if it's not the default
-            if ($campaign->image && !str_contains($campaign->image, 'unsplash.com')) {
-                $cleanPath = str_replace('storage/', 'public/', $campaign->image);
-                // If it starts with public/, just use it directly
-                if (!str_starts_with($cleanPath, 'public/')) {
-                    $cleanPath = 'public/' . $cleanPath;
-                }
-                Storage::disk('local')->delete($cleanPath);
+            // Delete old image if it's not the default Unsplash image
+            if ($campaign->image && !str_contains($campaign->image, 'unsplash.com') && $campaign->image !== 'campaigns/default.jpg') {
+                Storage::disk('public')->delete($campaign->image);
             }
 
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $newImage = $image->storeAs('public/campaigns', $imageName);
-            $imagePath = str_replace('public/', 'storage/', $newImage); // Convert to public path
+            $path = $request->file('image')->store('campaigns', 'public');
+            // $path will be in format 'campaigns/filename.jpg'
+            $imagePath = $path;
         }
 
         $campaign->update([
