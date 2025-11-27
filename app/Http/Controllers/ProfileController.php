@@ -3,94 +3,73 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\DonationTransaction;
 
 class ProfileController extends Controller
 {
-    // Menampilkan semua profil
     public function index()
     {
-        $profiles = session('profiles', [
-            ['id' => 1, 'name' => 'Saskia Naila', 'email' => 'saskia@example.com', 'age' => 21],
-            ['id' => 2, 'name' => 'Budi Santoso', 'email' => 'budi@example.com', 'age' => 25],
-        ]);
+        $user = Auth::user();
 
-        return view('profiles.index', compact('profiles'));
+        // Calculate total donations amount
+        $totalDonation = $user->donationTransactions()->sum('amount');
+
+        // Count all transactions
+        $totalTransactions = $user->donationTransactions()->count();
+
+        // Get recent transactions for history (last 5)
+        $recentTransactions = $user->donationTransactions()
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        return view('profiles.index', compact('user', 'totalDonation', 'totalTransactions', 'recentTransactions'));
     }
 
-    // Menampilkan form tambah profil
-    public function create()
+    public function edit()
     {
-        return view('profiles.create');
+        $user = Auth::user();
+        return view('profiles.edit', compact('user'));
     }
 
-    // Menyimpan profil ke session
-    public function store(Request $request)
+    public function update(Request $request)
     {
+        $user = Auth::user();
+
         $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'age' => 'required|numeric',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:20',
+            'birth_date' => 'nullable|date',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $profiles = session('profiles', []);
-        $newId = count($profiles) + 1;
+        // Handle profile photo upload
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('profile-photos', 'public');
+        }
 
-        $profiles[] = [
-            'id' => $newId,
+        $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            'age' => $request->age,
-        ];
-
-        session(['profiles' => $profiles]);
-
-        return redirect()->route('profiles.index')->with('success', 'Profil berhasil ditambahkan!');
-    }
-
-    // Menampilkan form edit
-    public function edit($id)
-    {
-        $profiles = session('profiles', []);
-        $profile = collect($profiles)->firstWhere('id', $id);
-
-        if (!$profile) {
-            abort(404);
-        }
-
-        return view('profiles.edit', compact('profile'));
-    }
-
-    // Update data profil
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'age' => 'required|numeric',
+            'phone' => $request->phone,
+            'birth_date' => $request->birth_date,
+            'photo' => $photoPath ?? $user->photo,
         ]);
 
-        $profiles = session('profiles', []);
-        foreach ($profiles as &$profile) {
-            if ($profile['id'] == $id) {
-                $profile['name'] = $request->name;
-                $profile['email'] = $request->email;
-                $profile['age'] = $request->age;
-            }
-        }
-
-        session(['profiles' => $profiles]);
-
-        return redirect()->route('profiles.index')->with('success', 'Profil berhasil diperbarui!');
+        return redirect()->route('profiles.index')->with('success', 'Profile updated successfully');
     }
 
-    // Hapus profil
-    public function destroy($id)
+    public function showTransactionHistory()
     {
-        $profiles = session('profiles', []);
-        $profiles = array_filter($profiles, fn($p) => $p['id'] != $id);
+        $user = Auth::user();
 
-        session(['profiles' => array_values($profiles)]);
+        $transactions = $user->donationTransactions()
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
-        return redirect()->route('profiles.index')->with('success', 'Profil berhasil dihapus!');
+        return view('profiles.transactions', compact('transactions'));
     }
 }

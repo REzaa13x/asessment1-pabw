@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\DonationController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VolunteerRegistrationController;
 
@@ -25,8 +26,28 @@ Route::post('/register', [RegisterController::class, 'register'])->name('registe
 // Rute Halaman Utama
 Route::get('/', [Controller::class, 'home'])->name('home');
 
-// Rute Halaman Relawan (Arahkan ke Controller method index)
-Route::get('/relawan', [VolunteerRegistrationController::class, 'index'])->name('volunteer');
+// Rute Donation Details - Using modern design
+Route::get('/donation-details/{campaign?}', [DonationController::class, 'index'])->name('donation.details');
+Route::get('/donation-checkout/{campaign?}', [DonationController::class, 'checkout'])->name('donation.checkout');
+Route::get('/donation/manual-transfer/{order_id}', [DonationController::class, 'manualTransfer'])->name('donation.manual.transfer');
+Route::post('/donation/upload-proof/{order_id}', [DonationController::class, 'uploadProof'])->name('donation.upload.proof');
+Route::get('/transaction/download/{order_id}', [DonationController::class, 'downloadTransactionPDF'])->name('transaction.download.pdf');
+Route::post('/donation-process', [DonationController::class, 'process'])->name('donation.process');
+
+// Rute Halaman Relawan
+Route::get('/relawan', function () {
+    return view('volunteer.index');
+})->name('volunteer');
+
+// Rute untuk menampilkan semua kampanye - arahkan ke halaman home
+Route::get('/campaigns', function () {
+    return redirect('/');
+})->name('campaigns.all');
+
+// Rute Halaman Relawan
+Route::get('/relawan', function () {
+    return view('volunteer.index');
+})->name('volunteer');
 
 // Rute Form Pendaftaran Relawan
 Route::get('/relawan/daftar', [VolunteerRegistrationController::class, 'create'])->name('volunteer.register');
@@ -44,7 +65,10 @@ Route::post('/relawan/store', [VolunteerRegistrationController::class, 'store'])
 Route::middleware(['auth'])->group(function () {
 
     // Rute Profil User (Bisa diakses user biasa & admin)
-    Route::resource('profiles', ProfileController::class);
+    Route::get('/profiles', [ProfileController::class, 'index'])->name('profiles.index');
+    Route::get('/profiles/edit', [ProfileController::class, 'edit'])->name('profiles.edit');
+    Route::put('/profiles', [ProfileController::class, 'update'])->name('profiles.update');
+    Route::get('/profiles/transactions', [ProfileController::class, 'showTransactionHistory'])->name('profiles.transactions');
 
     // Rute Khusus Admin
     Route::prefix('admin')->name('admin.')->group(function () {
@@ -69,6 +93,10 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('campaigns', CampaignController::class);
         Route::resource('notifications', NotifikasiController::class);
         Route::resource('volunteers', VolunteerAdminController::class);
+
+        // Donation Transactions Management
+        Route::get('donation-transactions', [DonationController::class, 'adminIndex'])->name('donations.index');
+        Route::put('donation-transactions/{order_id}/status', [DonationController::class, 'updateStatus'])->name('donations.updateStatus');
     });
 });
 
@@ -93,4 +121,3 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/{id}', [\App\Http\Controllers\Admin\VolunteerVerificationController::class, 'destroy'])->name('destroy');
     });
 });
-

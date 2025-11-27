@@ -295,19 +295,18 @@
                                 </button>
                             </div>
                         </div>
-                    </div>
-                    @endforeach
-                    @else
-                    <div class="col-span-full py-24 text-center bg-white rounded-3xl border border-dashed border-slate-200">
-                        <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-heart-broken text-slate-300 text-4xl"></i>
+                        @endforeach
+                        @else
+                        <div class="col-span-full py-24 text-center bg-white rounded-3xl border border-dashed border-slate-200">
+                            <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-heart-broken text-slate-300 text-4xl"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-dark">Belum ada kampanye</h3>
+                            <p class="text-slate-500">Nantikan program kebaikan selanjutnya.</p>
                         </div>
-                        <h3 class="text-lg font-bold text-dark">Belum ada kampanye</h3>
-                        <p class="text-slate-500">Nantikan program kebaikan selanjutnya.</p>
+                        @endif
                     </div>
-                    @endif
                 </div>
-            </div>
         </section>
         <section class="py-24 bg-surface border-y border-slate-200 overflow-hidden">
             <div class="max-w-6xl mx-auto px-6">

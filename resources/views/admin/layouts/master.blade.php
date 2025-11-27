@@ -15,7 +15,10 @@
                         primary: '#1d4ed8', // biru utama
                         secondary: '#3b82f6', // biru lebih muda
                         accent: '#f59e0b', // warna aksen
+
                         softblue: '#f0f9ff', // background lebih soft
+                        softblue: '#f0f5ff', // background lebih soft
+
                         softblue2: '#e0f2fe',
                         softblue3: '#bae6fd',
                     }
@@ -43,6 +46,7 @@
         .sidebar {
             background: linear-gradient(180deg, #1d4ed8 0%, #1e40af 100%);
             box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
         }
         .nav-item {
             transition: all 0.3s ease;
@@ -53,6 +57,12 @@
         }
         .nav-item.active {
             background-color: rgba(255, 255, 255, 0.25);
+        }
+        .content-wrapper {
+            flex-grow: 1;
+            min-height: 100vh;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
         }
     </style>
 </head>
@@ -72,25 +82,40 @@
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </a>
+
+                <a href="{{ route('admin.donations.index') }}" class="nav-item {{ request()->routeIs('admin.donations.*') ? 'active' : '' }} flex items-center space-x-3 py-3 px-4 mb-2">
+                    <i class="fas fa-money-check-alt"></i>
+                    <span>Verifikasi Donasi</span>
+                </a>
+
                 <a href="{{ route('admin.campaigns.index') }}" class="nav-item {{ request()->routeIs('admin.campaigns.*') ? 'active' : '' }} flex items-center space-x-3 py-3 px-4 mb-2">
                     <i class="fas fa-donate"></i>
                     <span>Kampanye Donasi</span>
                 </a>
+
                 <a href="{{ route('admin.relawan.index') }}" class="nav-item {{ request()->routeIs('admin.relawan.*') || request()->routeIs('admin.verifikasi-relawan.*') ? 'active' : '' }} flex items-center space-x-3 py-3 px-4 mb-2">
                     <i class="fas fa-hands-helping"></i>
                     <span>Kampanye Relawan</span>
                 </a>
+
                 <a href="{{ route('admin.verifikasi-relawan.index') }}" class="nav-item {{ request()->routeIs('admin.verifikasi-relawan.*') ? 'active' : '' }} flex items-center space-x-3 py-3 px-4 mb-2">
                     <i class="fas fa-user-check"></i>
                     <span>Daftar Relawan</span>
                 </a>
+
                 <a href="{{ route('admin.notifications.index') }}" class="nav-item {{ request()->routeIs('admin.notifications.*') ? 'active' : '' }} flex items-center space-x-3 py-3 px-4 mb-2">
                     <i class="fas fa-bell"></i>
                     <span>Notifikasi</span>
                 </a>
+
                 <a href="#" class="nav-item flex items-center space-x-3 py-3 px-4">
                     <i class="fas fa-cog"></i>
                     <span>Pengaturan</span>
+                </a>
+
+                <a href="{{ route('profiles.index') }}" class="nav-item {{ request()->routeIs('profiles.*') ? 'active' : '' }} flex items-center space-x-3 py-3 px-4 mb-2">
+                    <i class="fas fa-user"></i>
+                    <span>Profil Saya</span>
                 </a>
             </nav>
         </div>
@@ -110,5 +135,8 @@
     <div class="flex-1 p-8 overflow-auto">
         @yield('content')
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

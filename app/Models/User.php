@@ -22,6 +22,16 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'coins',
+        'photo',
+        'phone',
+        'birth_date',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'birth_date' => 'date',
     ];
 
     /**
@@ -45,5 +55,35 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get the coin histories for the user.
+     */
+    public function coinHistories()
+    {
+        return $this->hasMany(CoinHistory::class);
+    }
+
+    /**
+     * Get the donation transactions for the user.
+     */
+    public function donationTransactions()
+    {
+        return $this->hasMany(\App\Models\DonationTransaction::class);
+    }
+
+    /**
+     * Add coins to user
+     */
+    public function addCoins($amount, $reason = 'donation_completed')
+    {
+        $this->increment('coins', $amount);
+
+        $this->coinHistories()->create([
+            'amount' => $amount,
+            'reason' => $reason,
+            'transaction_type' => 'earned',
+        ]);
     }
 }
